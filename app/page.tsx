@@ -1225,37 +1225,60 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
               <Card className="lg:col-span-2 bg-card/80 border-primary/10">
                 <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">Ticket Volume Trend (4 Weeks)</CardTitle></CardHeader>
                 <CardContent className="p-4 pt-2">
-                  <div className="space-y-1">
-                    {trendData.map((week, wi) => (
-                      <div key={wi}>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[10px] text-muted-foreground w-12 flex-shrink-0">{week.label}</span>
-                          <div className="flex-1 flex items-end gap-[2px] h-10">
-                            {week.values.map((v, di) => {
-                              const pct = (v / trendMax) * 100
+                  {/* Y-axis labels + chart area */}
+                  <div className="flex gap-2">
+                    {/* Y-axis */}
+                    <div className="flex flex-col justify-between h-[180px] py-1">
+                      {[trendMax, Math.round(trendMax * 0.75), Math.round(trendMax * 0.5), Math.round(trendMax * 0.25), 0].map(v => (
+                        <span key={v} className="text-[9px] text-muted-foreground w-6 text-right">{v}</span>
+                      ))}
+                    </div>
+                    {/* Chart grid */}
+                    <div className="flex-1 relative">
+                      {/* Grid lines */}
+                      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                        {[0, 1, 2, 3, 4].map(i => (
+                          <div key={i} className="w-full border-t border-primary/5" />
+                        ))}
+                      </div>
+                      {/* Bars grouped by day across weeks */}
+                      <div className="relative flex items-end gap-1 h-[180px]">
+                        {dayLabels.map((day, di) => (
+                          <div key={day} className="flex-1 flex items-end gap-[1px] h-full">
+                            {trendData.map((week, wi) => {
+                              const v = week.values[di]
+                              const barH = Math.max((v / trendMax) * 172, 3)
                               const isHighest = v === Math.max(...week.values)
+                              const colorClass = isHighest ? 'bg-[hsl(43,75%,38%)]' : wi === trendData.length - 1 ? 'bg-[hsl(27,61%,26%)]' : 'bg-[hsl(27,61%,26%)]/40'
                               return (
-                                <div key={di} className="flex-1 flex flex-col items-center group relative">
-                                  <div className={`w-full rounded-sm transition-all ${isHighest ? 'bg-accent' : wi === trendData.length - 1 ? 'bg-primary' : 'bg-primary/50'}`} style={{ height: `${pct}%`, minHeight: '2px' }} />
-                                  <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-foreground text-background text-[9px] px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">{v}</div>
+                                <div key={wi} className="flex-1 flex flex-col justify-end h-full group relative">
+                                  <div
+                                    className={`w-full rounded-t-sm ${colorClass} transition-all hover:opacity-80`}
+                                    style={{ height: `${barH}px` }}
+                                  />
+                                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-foreground text-background text-[9px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                                    {week.label}: {v}
+                                  </div>
                                 </div>
                               )
                             })}
                           </div>
-                        </div>
-                      </div>
-                    ))}
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="w-12 flex-shrink-0" />
-                      <div className="flex-1 flex gap-[2px]">
-                        {dayLabels.map(d => <span key={d} className="flex-1 text-center text-[9px] text-muted-foreground">{d}</span>)}
+                        ))}
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 mt-3 pt-2 border-t border-primary/10">
-                    <div className="flex items-center gap-1.5"><div className="w-3 h-1.5 rounded-sm bg-primary/50" /><span className="text-[10px] text-muted-foreground">Weeks 1-3</span></div>
-                    <div className="flex items-center gap-1.5"><div className="w-3 h-1.5 rounded-sm bg-primary" /><span className="text-[10px] text-muted-foreground">Current Week</span></div>
-                    <div className="flex items-center gap-1.5"><div className="w-3 h-1.5 rounded-sm bg-accent" /><span className="text-[10px] text-muted-foreground">Peak Day</span></div>
+                  {/* X-axis labels */}
+                  <div className="flex gap-2 mt-1">
+                    <div className="w-6 flex-shrink-0" />
+                    <div className="flex-1 flex gap-1">
+                      {dayLabels.map(d => <span key={d} className="flex-1 text-center text-[10px] text-muted-foreground font-medium">{d}</span>)}
+                    </div>
+                  </div>
+                  {/* Legend */}
+                  <div className="flex items-center gap-5 mt-3 pt-2 border-t border-primary/10">
+                    <div className="flex items-center gap-1.5"><div className="w-3 h-2.5 rounded-sm bg-[hsl(27,61%,26%)]/40" /><span className="text-[10px] text-muted-foreground">Weeks 1-3</span></div>
+                    <div className="flex items-center gap-1.5"><div className="w-3 h-2.5 rounded-sm bg-[hsl(27,61%,26%)]" /><span className="text-[10px] text-muted-foreground">Current Week</span></div>
+                    <div className="flex items-center gap-1.5"><div className="w-3 h-2.5 rounded-sm bg-[hsl(43,75%,38%)]" /><span className="text-[10px] text-muted-foreground">Peak Day</span></div>
                   </div>
                 </CardContent>
               </Card>
