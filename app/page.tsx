@@ -287,7 +287,7 @@ function DateRangeFilter({ value, onChange }: { value: string; onChange: (v: str
     <div className="flex items-center gap-1.5">
       <Clock className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
       {DATE_RANGES.map(r => (
-        <button key={r.id} onClick={() => onChange(r.id)} className={`px-2.5 py-1 text-xs rounded-lg transition-all ${value === r.id ? 'glass-nav-active text-primary-foreground shadow-sm' : 'glass-light text-secondary-foreground hover:bg-white/40'}`}>
+        <button key={r.id} onClick={() => onChange(r.id)} className={`px-2.5 py-1 text-xs rounded-lg transition-all font-medium ${value === r.id ? 'glass-nav-active text-primary-foreground shadow-sm' : 'glass-light text-foreground hover:bg-white/50'}`}>
           {r.label}
         </button>
       ))}
@@ -408,7 +408,7 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
                     {msg.agentData?.follow_up_suggestions && Array.isArray(msg.agentData.follow_up_suggestions) && (
                       <div className="mt-2 flex flex-wrap gap-1">
                         {msg.agentData.follow_up_suggestions.map((s: string, i: number) => (
-                          <button key={i} onClick={() => handleSend(s)} className="text-xs glass-light hover:bg-white/40 text-secondary-foreground rounded-full px-3 py-1 transition-all">{s}</button>
+                          <button key={i} onClick={() => handleSend(s)} className="text-xs glass-light hover:bg-white/50 text-foreground font-medium rounded-full px-3 py-1 transition-all">{s}</button>
                         ))}
                       </div>
                     )}
@@ -450,7 +450,7 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
           </div>
           <div className="space-y-2">
             {quickActions.map(action => (
-              <button key={action} onClick={() => handleSend(action)} className="w-full text-left text-sm glass-light rounded-xl px-3 py-2 transition-all hover:bg-white/40 flex items-center gap-2">
+              <button key={action} onClick={() => handleSend(action)} className="w-full text-left text-sm glass-light rounded-xl px-3 py-2 transition-all hover:bg-white/50 text-foreground font-medium flex items-center gap-2">
                 <ArrowRight className="w-3 h-3 text-primary" />{action}
               </button>
             ))}
@@ -479,7 +479,7 @@ function EmployeeTicketsScreen({ sampleMode }: { sampleMode: boolean }) {
         <div className="p-4 border-b border-white/30">
           <div className="flex gap-2 flex-wrap">
             {filters.map(f => (
-              <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1 text-sm rounded-full capitalize transition-all ${filter === f ? 'glass-nav-active text-primary-foreground' : 'glass-light text-secondary-foreground hover:bg-white/40'}`}>{f === 'in-progress' ? 'In Progress' : f}</button>
+              <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1 text-sm rounded-full capitalize transition-all font-medium ${filter === f ? 'glass-nav-active text-primary-foreground' : 'glass-light text-foreground hover:bg-white/50'}`}>{f === 'in-progress' ? 'In Progress' : f}</button>
             ))}
           </div>
         </div>
@@ -492,7 +492,7 @@ function EmployeeTicketsScreen({ sampleMode }: { sampleMode: boolean }) {
               </div>
             )}
             {filtered.map(ticket => (
-              <button key={ticket.id} onClick={() => setSelectedTicket(ticket)} className={`w-full text-left p-4 rounded-xl transition-all hover:shadow-lg ${selectedTicket?.id === ticket.id ? 'glass-heavy border-primary/30 shadow-lg' : 'glass-light hover:bg-white/40'}`}>
+              <button key={ticket.id} onClick={() => setSelectedTicket(ticket)} className={`w-full text-left p-4 rounded-xl transition-all hover:shadow-lg ${selectedTicket?.id === ticket.id ? 'glass-heavy border-primary/30 shadow-lg' : 'glass-light hover:bg-white/50'}`}>
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
@@ -595,7 +595,7 @@ function EmployeeOrgChartScreen({ sampleMode }: { sampleMode: boolean }) {
     if (!matches && !childMatches && searchTerm) return null
     return (
       <div key={node.id} style={{ marginLeft: depth * 24 }}>
-        <button onClick={() => setSelectedNode(node)} className={`flex items-center gap-2 w-full text-left p-2 rounded-xl transition-all hover:bg-white/40 ${selectedNode?.id === node.id ? 'glass-heavy' : ''}`}>
+        <button onClick={() => setSelectedNode(node)} className={`flex items-center gap-2 w-full text-left p-2 rounded-xl transition-all hover:bg-white/50 ${selectedNode?.id === node.id ? 'glass-heavy' : ''}`}>
           {hasChildren && <button onClick={(e) => { e.stopPropagation(); toggleExpand(node.id) }}>{isExpanded ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />}</button>}
           {!hasChildren && <span className="w-4" />}
           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-semibold">{node.name.split(' ').map(n => n[0]).join('')}</div>
@@ -741,7 +741,7 @@ function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId
                   ) : (
                     <div className="space-y-2">
                       {criticalTickets.map(ticket => (
-                        <div key={ticket.id} className="flex items-center gap-3 p-2.5 rounded-xl glass-light hover:bg-white/40 transition-all">
+                        <div key={ticket.id} className="flex items-center gap-3 p-2.5 rounded-xl glass-light hover:bg-white/50 transition-all">
                           <Badge className={`text-[9px] px-1.5 py-0 ${getPriorityColor(ticket.priority)}`}>{ticket.priority}</Badge>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium truncate">{ticket.subject}</p>
@@ -789,24 +789,24 @@ function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId
                 <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif flex items-center gap-2"><Sparkles className="w-4 h-4 text-accent" />AI Quick Actions</CardTitle></CardHeader>
                 <CardContent className="p-4 pt-2">
                   <div className="grid grid-cols-2 gap-2">
-                    <button onClick={() => onNavigate('analytics')} className="p-3 rounded-xl glass-light hover:bg-white/40 transition-all text-left">
+                    <button onClick={() => onNavigate('analytics')} className="p-3 rounded-xl glass-light hover:bg-white/50 transition-all text-left">
                       <TrendingUp className="w-5 h-5 text-primary mb-1.5" />
-                      <p className="text-sm font-medium">Analyze Patterns</p>
+                      <p className="text-sm font-semibold text-foreground">Analyze Patterns</p>
                       <p className="text-xs text-muted-foreground">Root cause analysis</p>
                     </button>
-                    <button onClick={() => onNavigate('analytics')} className="p-3 rounded-xl glass-light hover:bg-white/40 transition-all text-left">
+                    <button onClick={() => onNavigate('analytics')} className="p-3 rounded-xl glass-light hover:bg-white/50 transition-all text-left">
                       <Clock className="w-5 h-5 text-primary mb-1.5" />
-                      <p className="text-sm font-medium">Predict Breaches</p>
+                      <p className="text-sm font-semibold text-foreground">Predict Breaches</p>
                       <p className="text-xs text-muted-foreground">SLA risk forecast</p>
                     </button>
-                    <button onClick={() => onNavigate('compliance')} className="p-3 rounded-xl glass-light hover:bg-white/40 transition-all text-left">
+                    <button onClick={() => onNavigate('compliance')} className="p-3 rounded-xl glass-light hover:bg-white/50 transition-all text-left">
                       <Shield className="w-5 h-5 text-primary mb-1.5" />
-                      <p className="text-sm font-medium">Scan Risks</p>
+                      <p className="text-sm font-semibold text-foreground">Scan Risks</p>
                       <p className="text-xs text-muted-foreground">Compliance check</p>
                     </button>
-                    <button onClick={() => onNavigate('tickets')} className="p-3 rounded-xl glass-light hover:bg-white/40 transition-all text-left">
+                    <button onClick={() => onNavigate('tickets')} className="p-3 rounded-xl glass-light hover:bg-white/50 transition-all text-left">
                       <Bot className="w-5 h-5 text-primary mb-1.5" />
-                      <p className="text-sm font-medium">AI Copilot</p>
+                      <p className="text-sm font-semibold text-foreground">AI Copilot</p>
                       <p className="text-xs text-muted-foreground">Ticket resolution</p>
                     </button>
                   </div>
@@ -930,7 +930,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
           </div>
           <div className="flex gap-1 flex-wrap">
             {['all', 'open', 'in-progress', 'escalated', 'resolved'].map(s => (
-              <button key={s} onClick={() => setStatusFilter(s)} className={`px-2 py-0.5 text-[10px] rounded-full capitalize transition-all ${statusFilter === s ? 'glass-nav-active text-primary-foreground' : 'glass-light text-secondary-foreground hover:bg-white/30'}`}>{s === 'in-progress' ? 'Progress' : s}</button>
+              <button key={s} onClick={() => setStatusFilter(s)} className={`px-2 py-0.5 text-[10px] rounded-full capitalize transition-all font-medium ${statusFilter === s ? 'glass-nav-active text-primary-foreground' : 'glass-light text-foreground hover:bg-white/50'}`}>{s === 'in-progress' ? 'Progress' : s}</button>
             ))}
           </div>
         </div>
@@ -939,7 +939,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
             {filtered.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">No tickets found</p>
             ) : filtered.map(ticket => (
-              <button key={ticket.id} onClick={() => { setSelectedTicket(ticket); setCopilotResult(null); setCopilotError(''); setReplyText('') }} className={`w-full text-left p-2.5 rounded-xl transition-all text-sm ${selectedTicket?.id === ticket.id ? 'glass-heavy border-white/40 shadow-md' : 'hover:bg-white/30 border border-transparent'}`}>
+              <button key={ticket.id} onClick={() => { setSelectedTicket(ticket); setCopilotResult(null); setCopilotError(''); setReplyText('') }} className={`w-full text-left p-2.5 rounded-xl transition-all text-sm ${selectedTicket?.id === ticket.id ? 'glass-heavy border-white/40 shadow-md' : 'hover:bg-white/50 border border-transparent'}`}>
                 <div className="flex items-center gap-1.5 mb-0.5">
                   <span className="text-[10px] font-mono text-muted-foreground">{ticket.id}</span>
                   <Badge className={`text-[9px] px-1.5 py-0 ${getPriorityColor(ticket.priority)}`}>{ticket.priority}</Badge>
@@ -1078,7 +1078,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
                     <CardHeader className="p-3 pb-1"><CardTitle className="text-xs font-serif">Drafted Reply</CardTitle></CardHeader>
                     <CardContent className="p-3 pt-1">
                       {renderMarkdown(copilotResult.drafted_reply)}
-                      <Button onClick={() => setReplyText(copilotResult.drafted_reply)} size="sm" variant="outline" className="w-full mt-2 text-xs glass-light border-accent/30 text-accent-foreground hover:bg-accent/10 glass-btn rounded-xl">
+                      <Button onClick={() => setReplyText(copilotResult.drafted_reply)} size="sm" variant="outline" className="w-full mt-2 text-xs bg-primary/10 border-primary/30 text-primary font-semibold hover:bg-primary/20 glass-btn rounded-xl">
                         <ArrowRight className="w-3 h-3 mr-1" />Use This Reply
                       </Button>
                     </CardContent>
@@ -1423,7 +1423,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
                               <p className="text-xs text-muted-foreground mt-0.5">{opp?.recommendation}</p>
                               <div className="flex items-center gap-2 mt-1.5">
                                 <Badge variant="outline" className="text-[9px]">Vol: {opp?.current_volume}</Badge>
-                                <Badge className="text-[9px] bg-accent/20 text-accent-foreground">{opp?.automation_potential}</Badge>
+                                <Badge className="text-[9px] bg-accent/20 text-foreground font-medium">{opp?.automation_potential}</Badge>
                               </div>
                             </div>
                           </div>
@@ -1992,7 +1992,7 @@ export default function Page() {
                 </div>
               </div>
             ) : (
-              <button onClick={() => setRole(role === 'employee' ? 'hr' : 'employee')} className="p-1.5 rounded-xl glass-light hover:bg-white/40 transition-all" title={`Switch to ${role === 'employee' ? 'HR' : 'Employee'}`}>
+              <button onClick={() => setRole(role === 'employee' ? 'hr' : 'employee')} className="p-1.5 rounded-xl glass-light hover:bg-white/50 transition-all text-foreground" title={`Switch to ${role === 'employee' ? 'HR' : 'Employee'}`}>
                 <User className="w-4 h-4" />
               </button>
             )}
@@ -2001,7 +2001,7 @@ export default function Page() {
           {/* Navigation */}
           <nav className="flex-1 p-2 space-y-1">
             {navItems.map(item => (
-              <button key={item.id} onClick={() => setActiveScreen(item.id)} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm glass-nav-item ${activeScreen === item.id ? 'glass-nav-active text-primary-foreground' : 'text-foreground'}`} title={sidebarCollapsed ? item.label : undefined}>
+              <button key={item.id} onClick={() => setActiveScreen(item.id)} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium glass-nav-item ${activeScreen === item.id ? 'glass-nav-active text-primary-foreground' : 'text-foreground'}`} title={sidebarCollapsed ? item.label : undefined}>
                 <item.icon className="w-4 h-4 flex-shrink-0" />
                 {!sidebarCollapsed && <span>{item.label}</span>}
               </button>
