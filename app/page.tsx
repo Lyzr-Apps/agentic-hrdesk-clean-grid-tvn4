@@ -119,32 +119,32 @@ const MOCK_TICKETS: TicketData[] = [
 ]
 
 const MOCK_ORG: OrgNode = {
-  id: 'o1', name: 'Alexandra Sterling', role: 'CEO', department: 'Executive', email: 'a.sterling@hrnexus.com', phone: '+1 (555) 100-0001',
+  id: 'o1', name: 'Alexandra Sterling', role: 'CEO', department: 'Executive', email: 'a.sterling@lyzr-hr.com', phone: '+1 (555) 100-0001',
   children: [
     {
-      id: 'o2', name: 'Michael Torres', role: 'VP Engineering', department: 'Engineering', email: 'm.torres@hrnexus.com', phone: '+1 (555) 200-0001',
+      id: 'o2', name: 'Michael Torres', role: 'VP Engineering', department: 'Engineering', email: 'm.torres@lyzr-hr.com', phone: '+1 (555) 200-0001',
       children: [
-        { id: 'o5', name: 'Sarah Mitchell', role: 'Engineering Manager', department: 'Engineering', email: 's.mitchell@hrnexus.com', phone: '+1 (555) 200-0002', children: [
-          { id: 'o10', name: 'David Kim', role: 'Senior Engineer', department: 'Engineering', email: 'd.kim@hrnexus.com', phone: '+1 (555) 200-0003', children: [] },
-          { id: 'o11', name: 'Alex Rivera', role: 'Software Engineer', department: 'Engineering', email: 'a.rivera@hrnexus.com', phone: '+1 (555) 200-0004', children: [] },
+        { id: 'o5', name: 'Sarah Mitchell', role: 'Engineering Manager', department: 'Engineering', email: 's.mitchell@lyzr-hr.com', phone: '+1 (555) 200-0002', children: [
+          { id: 'o10', name: 'David Kim', role: 'Senior Engineer', department: 'Engineering', email: 'd.kim@lyzr-hr.com', phone: '+1 (555) 200-0003', children: [] },
+          { id: 'o11', name: 'Alex Rivera', role: 'Software Engineer', department: 'Engineering', email: 'a.rivera@lyzr-hr.com', phone: '+1 (555) 200-0004', children: [] },
         ]},
-        { id: 'o6', name: 'Priya Sharma', role: 'QA Lead', department: 'Engineering', email: 'p.sharma@hrnexus.com', phone: '+1 (555) 200-0005', children: [] },
+        { id: 'o6', name: 'Priya Sharma', role: 'QA Lead', department: 'Engineering', email: 'p.sharma@lyzr-hr.com', phone: '+1 (555) 200-0005', children: [] },
       ]
     },
     {
-      id: 'o3', name: 'Catherine Wu', role: 'VP People & Culture', department: 'HR', email: 'c.wu@hrnexus.com', phone: '+1 (555) 300-0001',
+      id: 'o3', name: 'Catherine Wu', role: 'VP People & Culture', department: 'HR', email: 'c.wu@lyzr-hr.com', phone: '+1 (555) 300-0001',
       children: [
-        { id: 'o7', name: 'James Cooper', role: 'HR Manager', department: 'HR', email: 'j.cooper@hrnexus.com', phone: '+1 (555) 300-0002', children: [
-          { id: 'o12', name: 'Susan Wright', role: 'HR Specialist', department: 'HR', email: 's.wright@hrnexus.com', phone: '+1 (555) 300-0003', children: [] },
+        { id: 'o7', name: 'James Cooper', role: 'HR Manager', department: 'HR', email: 'j.cooper@lyzr-hr.com', phone: '+1 (555) 300-0002', children: [
+          { id: 'o12', name: 'Susan Wright', role: 'HR Specialist', department: 'HR', email: 's.wright@lyzr-hr.com', phone: '+1 (555) 300-0003', children: [] },
         ]},
-        { id: 'o8', name: 'Lisa Park', role: 'Benefits Manager', department: 'HR', email: 'l.park@hrnexus.com', phone: '+1 (555) 300-0004', children: [] },
+        { id: 'o8', name: 'Lisa Park', role: 'Benefits Manager', department: 'HR', email: 'l.park@lyzr-hr.com', phone: '+1 (555) 300-0004', children: [] },
       ]
     },
     {
-      id: 'o4', name: 'Robert Chen', role: 'VP Finance', department: 'Finance', email: 'r.chen@hrnexus.com', phone: '+1 (555) 400-0001',
+      id: 'o4', name: 'Robert Chen', role: 'VP Finance', department: 'Finance', email: 'r.chen@lyzr-hr.com', phone: '+1 (555) 400-0001',
       children: [
-        { id: 'o9', name: 'Nina Patel', role: 'Finance Manager', department: 'Finance', email: 'n.patel@hrnexus.com', phone: '+1 (555) 400-0002', children: [
-          { id: 'o13', name: 'Tom Wilson', role: 'Financial Analyst', department: 'Finance', email: 't.wilson@hrnexus.com', phone: '+1 (555) 400-0003', children: [] },
+        { id: 'o9', name: 'Nina Patel', role: 'Finance Manager', department: 'Finance', email: 'n.patel@lyzr-hr.com', phone: '+1 (555) 400-0002', children: [
+          { id: 'o13', name: 'Tom Wilson', role: 'Financial Analyst', department: 'Finance', email: 't.wilson@lyzr-hr.com', phone: '+1 (555) 400-0003', children: [] },
         ]},
       ]
     },
@@ -159,13 +159,55 @@ const SAMPLE_CHAT: ChatMessage[] = [
 ]
 
 // ─── AGENT INFO ───
-const AGENTS_INFO = [
-  { id: AGENT_IDS.orchestrator, name: 'HR Orchestrator', purpose: 'Employee concierge -- routes queries to sub-agents' },
-  { id: AGENT_IDS.resolutionCopilot, name: 'Resolution Copilot', purpose: 'AI-powered ticket resolution suggestions' },
-  { id: AGENT_IDS.rootCause, name: 'Root Cause Analyst', purpose: 'Pattern analysis across HR tickets' },
-  { id: AGENT_IDS.complianceRisk, name: 'Compliance Risk Scanner', purpose: 'Identifies compliance and legal risks' },
-  { id: AGENT_IDS.slaPrediction, name: 'SLA Predictor', purpose: 'Predicts SLA breach risk for open tickets' },
-]
+const AGENTS_INFO: Record<string, { name: string; purpose: string; steps: string[] }> = {
+  [AGENT_IDS.orchestrator]: { name: 'HR Orchestrator', purpose: 'Employee concierge -- routes queries to sub-agents', steps: ['Classifying intent', 'Routing to sub-agents', 'Policy Retrieval searching KB', 'Action Execution processing', 'Sentiment analysis running', 'Aggregating responses'] },
+  [AGENT_IDS.resolutionCopilot]: { name: 'Resolution Copilot', purpose: 'AI-powered ticket resolution suggestions', steps: ['Analyzing ticket context', 'Searching knowledge base', 'Drafting response', 'Finding precedent cases', 'Generating resolution steps'] },
+  [AGENT_IDS.rootCause]: { name: 'Root Cause Analyst', purpose: 'Pattern analysis across HR tickets', steps: ['Scanning ticket history', 'Identifying recurring patterns', 'Mapping department impact', 'Evaluating automation potential', 'Prioritizing actions'] },
+  [AGENT_IDS.complianceRisk]: { name: 'Compliance Risk Scanner', purpose: 'Identifies compliance and legal risks', steps: ['Scanning active tickets', 'Cross-referencing policies', 'Evaluating legal exposure', 'Classifying risk severity', 'Generating risk summary'] },
+  [AGENT_IDS.slaPrediction]: { name: 'SLA Predictor', purpose: 'Predicts SLA breach risk for open tickets', steps: ['Analyzing ticket age', 'Assessing complexity', 'Checking workload distribution', 'Calculating breach probability', 'Generating recommendations'] },
+}
+
+// ─── Agent Thinking Orchestration Bar (one-line) ───
+function AgentThinkingBar({ activeAgentId }: { activeAgentId: string | null }) {
+  const [stepIndex, setStepIndex] = useState(0)
+
+  useEffect(() => {
+    if (!activeAgentId) { setStepIndex(0); return }
+    const interval = setInterval(() => {
+      setStepIndex(prev => prev + 1)
+    }, 2200)
+    return () => clearInterval(interval)
+  }, [activeAgentId])
+
+  if (!activeAgentId) return null
+
+  const agent = AGENTS_INFO[activeAgentId]
+  if (!agent) return null
+
+  const currentStep = agent.steps[stepIndex % agent.steps.length]
+
+  return (
+    <div className="w-full bg-primary/5 border-b border-primary/10 px-4 py-1.5 flex items-center gap-3 overflow-hidden">
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="relative flex items-center justify-center w-4 h-4">
+          <span className="absolute inline-flex h-full w-full rounded-full bg-accent/40 animate-ping" />
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent" />
+        </div>
+        <span className="text-xs font-semibold text-primary whitespace-nowrap">{agent.name}</span>
+      </div>
+      <Separator orientation="vertical" className="h-4 bg-primary/20" />
+      <div className="flex items-center gap-1.5 min-w-0 overflow-hidden">
+        <Loader2 className="w-3 h-3 animate-spin text-accent flex-shrink-0" />
+        <span className="text-xs text-muted-foreground truncate animate-pulse">{currentStep}...</span>
+      </div>
+      <div className="ml-auto flex gap-0.5 flex-shrink-0">
+        {agent.steps.map((_, i) => (
+          <span key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i <= (stepIndex % agent.steps.length) ? 'bg-accent' : 'bg-muted'}`} />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 // ─── HELPERS ───
 const parseAgentResponse = (result: any) => {
@@ -228,6 +270,28 @@ function getPriorityColor(priority: string) {
     case 'low': return 'bg-green-500 text-white'
     default: return 'bg-gray-500 text-white'
   }
+}
+
+// ─── DATE FILTER COMPONENT ───
+const DATE_RANGES = [
+  { id: 'today', label: 'Today' },
+  { id: '7d', label: 'Last 7 Days' },
+  { id: '30d', label: 'Last 30 Days' },
+  { id: '90d', label: 'Last 90 Days' },
+  { id: 'all', label: 'All Time' },
+]
+
+function DateRangeFilter({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <Clock className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+      {DATE_RANGES.map(r => (
+        <button key={r.id} onClick={() => onChange(r.id)} className={`px-2.5 py-1 text-xs rounded-md transition-colors ${value === r.id ? 'bg-primary text-primary-foreground' : 'bg-secondary/50 text-secondary-foreground hover:bg-secondary'}`}>
+          {r.label}
+        </button>
+      ))}
+    </div>
+  )
 }
 
 // ─── ERROR BOUNDARY ───
@@ -309,7 +373,7 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
           {messages.length === 0 && !sampleMode && (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4"><Bot className="w-8 h-8 text-primary" /></div>
-              <h3 className="font-serif text-xl font-semibold mb-2">Welcome to HR Concierge</h3>
+              <h3 className="font-serif text-xl font-semibold mb-2">Welcome to Lyzr HR Assistant</h3>
               <p className="text-muted-foreground text-sm max-w-sm">Ask me about leave policies, payroll, benefits, IT requests, or anything HR-related. I am here to help.</p>
             </div>
           )}
@@ -370,7 +434,7 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
         </div>
         <div className="p-4 border-t border-primary/20">
           <div className="flex gap-2">
-            <Input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask HR Concierge anything..." className="flex-1" onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }} disabled={loading} />
+            <Input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask Lyzr HR Assistant anything..." className="flex-1" onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }} disabled={loading} />
             <Button onClick={() => handleSend()} disabled={loading || !input.trim()} className="bg-primary text-primary-foreground">
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             </Button>
@@ -588,12 +652,226 @@ function EmployeeOrgChartScreen({ sampleMode }: { sampleMode: boolean }) {
   )
 }
 
+// ─── SCREEN: HR Overview Dashboard ───
+function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId, onNavigate }: { sampleMode: boolean; activeAgentId: string | null; setActiveAgentId: (id: string | null) => void; onNavigate: (screen: string) => void }) {
+  const [dateRange, setDateRange] = useState('30d')
+  const tickets = sampleMode ? MOCK_TICKETS : []
+  const openCount = tickets.filter(t => t.status === 'open').length
+  const inProgressCount = tickets.filter(t => t.status === 'in-progress').length
+  const resolvedCount = tickets.filter(t => t.status === 'resolved').length
+  const escalatedCount = tickets.filter(t => t.status === 'escalated').length
+  const criticalTickets = tickets.filter(t => t.priority === 'critical' || t.priority === 'high')
+  const recentTickets = tickets.slice(0, 5)
+
+  const overviewMetrics = [
+    { label: 'Total Tickets', value: tickets.length.toString(), icon: Ticket, color: 'text-primary', bg: 'bg-primary/10' },
+    { label: 'Open', value: openCount.toString(), icon: Clock, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { label: 'In Progress', value: inProgressCount.toString(), icon: Loader2, color: 'text-yellow-600', bg: 'bg-yellow-50' },
+    { label: 'Resolved', value: resolvedCount.toString(), icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-50' },
+    { label: 'Escalated', value: escalatedCount.toString(), icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-50' },
+  ]
+
+  const teamWorkload = [
+    { name: 'Sarah Mitchell', tickets: 4, dept: 'Engineering' },
+    { name: 'James Cooper', tickets: 3, dept: 'HR' },
+    { name: 'Lisa Park', tickets: 2, dept: 'Benefits' },
+    { name: 'HR Team', tickets: 3, dept: 'General' },
+    { name: 'Unassigned', tickets: 3, dept: '--' },
+  ]
+
+  const categoryBreakdown = [
+    { label: 'Leave', count: tickets.filter(t => t.category === 'Leave').length, color: 'bg-blue-500' },
+    { label: 'Payroll', count: tickets.filter(t => t.category === 'Payroll').length, color: 'bg-green-500' },
+    { label: 'Benefits', count: tickets.filter(t => t.category === 'Benefits').length, color: 'bg-purple-500' },
+    { label: 'IT Access', count: tickets.filter(t => t.category === 'IT Access').length, color: 'bg-orange-500' },
+    { label: 'Compliance', count: tickets.filter(t => t.category === 'Compliance').length, color: 'bg-red-500' },
+    { label: 'Onboarding', count: tickets.filter(t => t.category === 'Onboarding').length, color: 'bg-teal-500' },
+  ]
+  const maxCat = Math.max(...categoryBreakdown.map(c => c.count), 1)
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="p-4 border-b border-primary/20">
+        <div className="flex items-center justify-between mb-2">
+          <div>
+            <h2 className="font-serif text-2xl font-semibold">Dashboard</h2>
+            <p className="text-sm text-muted-foreground">HR operations overview and quick actions</p>
+          </div>
+        </div>
+        <DateRangeFilter value={dateRange} onChange={setDateRange} />
+      </div>
+      <ScrollArea className="flex-1">
+        <div className="p-4 space-y-6">
+          {/* Metric Cards */}
+          {sampleMode ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              {overviewMetrics.map(m => (
+                <Card key={m.label} className="bg-card/80 border-primary/10 shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className={`w-9 h-9 rounded-lg ${m.bg} flex items-center justify-center mb-2`}>
+                      <m.icon className={`w-5 h-5 ${m.color}`} />
+                    </div>
+                    <p className="text-2xl font-bold font-serif">{m.value}</p>
+                    <p className="text-xs text-muted-foreground">{m.label}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <LayoutDashboard className="w-12 h-12 text-muted-foreground/20 mx-auto mb-3" />
+              <p className="text-muted-foreground">Enable sample data to view the dashboard</p>
+            </div>
+          )}
+
+          {sampleMode && (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              {/* Critical / High Priority Tickets */}
+              <Card className="lg:col-span-2 bg-card/80 border-primary/10">
+                <CardHeader className="p-4 pb-2">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-sm font-serif flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-red-500" />Priority Tickets</CardTitle>
+                    <Button onClick={() => onNavigate('tickets')} variant="outline" size="sm" className="text-xs">View All Tickets <ArrowRight className="w-3 h-3 ml-1" /></Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-4 pt-2">
+                  {criticalTickets.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-4">No critical or high priority tickets</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {criticalTickets.map(ticket => (
+                        <div key={ticket.id} className="flex items-center gap-3 p-2.5 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors">
+                          <Badge className={`text-[9px] px-1.5 py-0 ${getPriorityColor(ticket.priority)}`}>{ticket.priority}</Badge>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate">{ticket.subject}</p>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <span className="font-mono">{ticket.id}</span>
+                              <Badge className={`text-[9px] px-1.5 py-0 ${getStatusColor(ticket.status)}`}>{ticket.status}</Badge>
+                              <span>{ticket.category}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
+                            <Clock className="w-3 h-3" />
+                            <span>{ticket.slaHours}h / {ticket.slaDeadline}h</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Category Breakdown */}
+              <Card className="bg-card/80 border-primary/10">
+                <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">By Category</CardTitle></CardHeader>
+                <CardContent className="p-4 pt-2">
+                  <div className="space-y-2.5">
+                    {categoryBreakdown.map(c => (
+                      <div key={c.label} className="flex items-center gap-2">
+                        <span className="text-xs w-16 text-muted-foreground truncate">{c.label}</span>
+                        <div className="flex-1 h-3 bg-secondary rounded-full overflow-hidden">
+                          <div className={`h-full ${c.color} rounded-full transition-all`} style={{ width: `${(c.count / maxCat) * 100}%` }} />
+                        </div>
+                        <span className="text-xs font-medium w-5 text-right">{c.count}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {sampleMode && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* AI Quick Actions */}
+              <Card className="bg-card/80 border-primary/10">
+                <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif flex items-center gap-2"><Sparkles className="w-4 h-4 text-accent" />AI Quick Actions</CardTitle></CardHeader>
+                <CardContent className="p-4 pt-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <button onClick={() => onNavigate('analytics')} className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors text-left">
+                      <TrendingUp className="w-5 h-5 text-primary mb-1.5" />
+                      <p className="text-sm font-medium">Analyze Patterns</p>
+                      <p className="text-xs text-muted-foreground">Root cause analysis</p>
+                    </button>
+                    <button onClick={() => onNavigate('analytics')} className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors text-left">
+                      <Clock className="w-5 h-5 text-primary mb-1.5" />
+                      <p className="text-sm font-medium">Predict Breaches</p>
+                      <p className="text-xs text-muted-foreground">SLA risk forecast</p>
+                    </button>
+                    <button onClick={() => onNavigate('compliance')} className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors text-left">
+                      <Shield className="w-5 h-5 text-primary mb-1.5" />
+                      <p className="text-sm font-medium">Scan Risks</p>
+                      <p className="text-xs text-muted-foreground">Compliance check</p>
+                    </button>
+                    <button onClick={() => onNavigate('tickets')} className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors text-left">
+                      <Bot className="w-5 h-5 text-primary mb-1.5" />
+                      <p className="text-sm font-medium">AI Copilot</p>
+                      <p className="text-xs text-muted-foreground">Ticket resolution</p>
+                    </button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Team Workload */}
+              <Card className="bg-card/80 border-primary/10">
+                <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif flex items-center gap-2"><Users className="w-4 h-4 text-primary" />Team Workload</CardTitle></CardHeader>
+                <CardContent className="p-4 pt-2">
+                  <div className="space-y-2.5">
+                    {teamWorkload.map(member => (
+                      <div key={member.name} className="flex items-center gap-3 p-2 rounded-lg bg-secondary/20">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-semibold flex-shrink-0">
+                          {member.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{member.name}</p>
+                          <p className="text-xs text-muted-foreground">{member.dept}</p>
+                        </div>
+                        <Badge variant="outline" className="text-xs">{member.tickets} tickets</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Recent Activity */}
+          {sampleMode && (
+            <Card className="bg-card/80 border-primary/10">
+              <CardHeader className="p-4 pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-serif">Recent Tickets</CardTitle>
+                  <Button onClick={() => onNavigate('tickets')} variant="outline" size="sm" className="text-xs">View All <ArrowRight className="w-3 h-3 ml-1" /></Button>
+                </div>
+              </CardHeader>
+              <CardContent className="p-4 pt-2">
+                <div className="divide-y divide-primary/5">
+                  {recentTickets.map(ticket => (
+                    <div key={ticket.id} className="flex items-center gap-3 py-2.5">
+                      <span className="text-xs font-mono text-muted-foreground w-16">{ticket.id}</span>
+                      <p className="text-sm flex-1 truncate">{ticket.subject}</p>
+                      <Badge className={`text-[9px] px-1.5 py-0 ${getStatusColor(ticket.status)}`}>{ticket.status}</Badge>
+                      <Badge className={`text-[9px] px-1.5 py-0 ${getPriorityColor(ticket.priority)}`}>{ticket.priority}</Badge>
+                      <span className="text-xs text-muted-foreground w-20 text-right">{ticket.date}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </ScrollArea>
+    </div>
+  )
+}
+
 // ─── SCREEN: HR Ticket Dashboard ───
 function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }: { sampleMode: boolean; activeAgentId: string | null; setActiveAgentId: (id: string | null) => void }) {
   const [selectedTicket, setSelectedTicket] = useState<TicketData | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [priorityFilter, setPriorityFilter] = useState('all')
+  const [dateRange, setDateRange] = useState('30d')
   const [copilotResult, setCopilotResult] = useState<any>(null)
   const [copilotLoading, setCopilotLoading] = useState(false)
   const [copilotError, setCopilotError] = useState('')
@@ -636,6 +914,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
       <div className="w-80 border-r border-primary/20 flex flex-col flex-shrink-0">
         <div className="p-3 border-b border-primary/20">
           <h2 className="font-serif text-lg font-semibold mb-2">Tickets</h2>
+          <div className="mb-2"><DateRangeFilter value={dateRange} onChange={setDateRange} /></div>
           <div className="relative mb-2">
             <Search className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search..." className="pl-8 h-8 text-sm" />
@@ -846,34 +1125,34 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
   const [slaResult, setSlaResult] = useState<any>(null)
   const [slaLoading, setSlaLoading] = useState(false)
   const [slaError, setSlaError] = useState('')
-  const [expandedIssue, setExpandedIssue] = useState<number | null>(null)
+  const [dateRange, setDateRange] = useState('30d')
 
   const metrics = [
-    { label: 'Total Tickets', value: '1,247', icon: Ticket, change: '+12%' },
-    { label: 'Resolved Today', value: '23', icon: CheckCircle2, change: '+5' },
-    { label: 'SLA Compliance', value: '94.2%', icon: Clock, change: '+1.8%' },
-    { label: 'Automation Rate', value: '67%', icon: Zap, change: '+4%' },
+    { label: 'Total Tickets', value: '1,247', icon: Ticket, change: '+12%', changeUp: true },
+    { label: 'Resolved Today', value: '23', icon: CheckCircle2, change: '+5', changeUp: true },
+    { label: 'SLA Compliance', value: '94.2%', icon: Clock, change: '+1.8%', changeUp: true },
+    { label: 'Automation Rate', value: '67%', icon: Zap, change: '+4%', changeUp: true },
   ]
 
   const categoryData = [
-    { label: 'Leave', value: 28, color: 'bg-blue-500' },
-    { label: 'Payroll', value: 24, color: 'bg-green-500' },
-    { label: 'Benefits', value: 18, color: 'bg-purple-500' },
-    { label: 'IT Access', value: 15, color: 'bg-orange-500' },
-    { label: 'Compliance', value: 10, color: 'bg-red-500' },
-    { label: 'Onboarding', value: 5, color: 'bg-teal-500' },
+    { label: 'Leave', value: 28, color: 'bg-blue-500', dotColor: 'bg-blue-500' },
+    { label: 'Payroll', value: 24, color: 'bg-green-500', dotColor: 'bg-green-500' },
+    { label: 'Benefits', value: 18, color: 'bg-purple-500', dotColor: 'bg-purple-500' },
+    { label: 'IT Access', value: 15, color: 'bg-orange-500', dotColor: 'bg-orange-500' },
+    { label: 'Compliance', value: 10, color: 'bg-red-500', dotColor: 'bg-red-500' },
+    { label: 'Onboarding', value: 5, color: 'bg-teal-500', dotColor: 'bg-teal-500' },
   ]
 
-  const weeklyVolume = [
-    { day: 'Mon', count: 42 },
-    { day: 'Tue', count: 38 },
-    { day: 'Wed', count: 55 },
-    { day: 'Thu', count: 47 },
-    { day: 'Fri', count: 33 },
-    { day: 'Sat', count: 12 },
-    { day: 'Sun', count: 8 },
+  // Ticket volume trend -- area/line style data over 30 days
+  const trendData = [
+    { label: 'Week 1', values: [18, 22, 30, 25, 20, 8, 5] },
+    { label: 'Week 2', values: [20, 28, 35, 30, 24, 10, 6] },
+    { label: 'Week 3', values: [25, 32, 40, 38, 28, 12, 7] },
+    { label: 'Week 4', values: [22, 26, 55, 47, 33, 12, 8] },
   ]
-  const maxCount = Math.max(...weeklyVolume.map(d => d.count))
+  const allValues = trendData.flatMap(w => w.values)
+  const trendMax = Math.max(...allValues, 1)
+  const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
   const handleAnalyzePatterns = async () => {
     setRootCauseLoading(true)
@@ -910,8 +1189,13 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 border-b border-primary/20">
-        <h2 className="font-serif text-2xl font-semibold">Analytics Dashboard</h2>
-        <p className="text-sm text-muted-foreground">Insights and AI-powered analysis of HR operations</p>
+        <div className="flex items-center justify-between mb-2">
+          <div>
+            <h2 className="font-serif text-2xl font-semibold">Analytics Dashboard</h2>
+            <p className="text-sm text-muted-foreground">Insights and AI-powered analysis of HR operations</p>
+          </div>
+        </div>
+        <DateRangeFilter value={dateRange} onChange={setDateRange} />
       </div>
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-6">
@@ -923,7 +1207,9 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
                       <m.icon className="w-5 h-5 text-primary" />
-                      <span className="text-xs text-green-600 font-medium">{m.change}</span>
+                      <span className="text-xs text-green-600 font-medium flex items-center gap-0.5">
+                        <TrendingUp className="w-3 h-3" />{m.change}
+                      </span>
                     </div>
                     <p className="text-2xl font-bold font-serif">{m.value}</p>
                     <p className="text-xs text-muted-foreground">{m.label}</p>
@@ -933,34 +1219,80 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
             </div>
           )}
 
-          {/* Charts Row */}
+          {/* Charts Row -- Improved area chart + pie-like distribution */}
           {sampleMode && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <Card className="bg-card/80 border-primary/10">
-                <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">Weekly Ticket Volume</CardTitle></CardHeader>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <Card className="lg:col-span-2 bg-card/80 border-primary/10">
+                <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">Ticket Volume Trend (4 Weeks)</CardTitle></CardHeader>
                 <CardContent className="p-4 pt-2">
-                  <div className="flex items-end gap-2 h-32">
-                    {weeklyVolume.map(d => (
-                      <div key={d.day} className="flex-1 flex flex-col items-center gap-1">
-                        <span className="text-[10px] text-muted-foreground">{d.count}</span>
-                        <div className="w-full bg-primary/80 rounded-t transition-all" style={{ height: `${(d.count / maxCount) * 100}%` }} />
-                        <span className="text-[10px] text-muted-foreground">{d.day}</span>
+                  <div className="space-y-1">
+                    {trendData.map((week, wi) => (
+                      <div key={wi}>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] text-muted-foreground w-12 flex-shrink-0">{week.label}</span>
+                          <div className="flex-1 flex items-end gap-[2px] h-10">
+                            {week.values.map((v, di) => {
+                              const pct = (v / trendMax) * 100
+                              const isHighest = v === Math.max(...week.values)
+                              return (
+                                <div key={di} className="flex-1 flex flex-col items-center group relative">
+                                  <div className={`w-full rounded-sm transition-all ${isHighest ? 'bg-accent' : wi === trendData.length - 1 ? 'bg-primary' : 'bg-primary/50'}`} style={{ height: `${pct}%`, minHeight: '2px' }} />
+                                  <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-foreground text-background text-[9px] px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">{v}</div>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
                       </div>
                     ))}
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="w-12 flex-shrink-0" />
+                      <div className="flex-1 flex gap-[2px]">
+                        {dayLabels.map(d => <span key={d} className="flex-1 text-center text-[9px] text-muted-foreground">{d}</span>)}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 mt-3 pt-2 border-t border-primary/10">
+                    <div className="flex items-center gap-1.5"><div className="w-3 h-1.5 rounded-sm bg-primary/50" /><span className="text-[10px] text-muted-foreground">Weeks 1-3</span></div>
+                    <div className="flex items-center gap-1.5"><div className="w-3 h-1.5 rounded-sm bg-primary" /><span className="text-[10px] text-muted-foreground">Current Week</span></div>
+                    <div className="flex items-center gap-1.5"><div className="w-3 h-1.5 rounded-sm bg-accent" /><span className="text-[10px] text-muted-foreground">Peak Day</span></div>
                   </div>
                 </CardContent>
               </Card>
               <Card className="bg-card/80 border-primary/10">
                 <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">Category Distribution</CardTitle></CardHeader>
                 <CardContent className="p-4 pt-2">
-                  <div className="space-y-2">
+                  {/* Donut-style ring */}
+                  <div className="flex justify-center mb-3">
+                    <div className="relative w-28 h-28">
+                      <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                        {(() => {
+                          const total = categoryData.reduce((s, c) => s + c.value, 0)
+                          let offset = 0
+                          const colors = ['#3b82f6', '#22c55e', '#a855f7', '#f97316', '#ef4444', '#14b8a6']
+                          return categoryData.map((c, i) => {
+                            const pct = (c.value / total) * 100
+                            const dashArray = `${pct * 2.51327} ${251.327 - pct * 2.51327}`
+                            const dashOffset = -offset * 2.51327
+                            offset += pct
+                            return <circle key={i} cx="50" cy="50" r="40" fill="none" stroke={colors[i]} strokeWidth="12" strokeDasharray={dashArray} strokeDashoffset={dashOffset} className="transition-all" />
+                          })
+                        })()}
+                      </svg>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center">
+                          <p className="text-lg font-bold font-serif">100%</p>
+                          <p className="text-[9px] text-muted-foreground">Total</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
                     {categoryData.map(c => (
                       <div key={c.label} className="flex items-center gap-2">
-                        <span className="text-xs w-20 text-muted-foreground">{c.label}</span>
-                        <div className="flex-1 h-4 bg-secondary rounded-full overflow-hidden">
-                          <div className={`h-full ${c.color} rounded-full transition-all`} style={{ width: `${c.value}%` }} />
-                        </div>
-                        <span className="text-xs font-medium w-8 text-right">{c.value}%</span>
+                        <span className={`w-2.5 h-2.5 rounded-full ${c.dotColor} flex-shrink-0`} />
+                        <span className="text-xs text-muted-foreground flex-1">{c.label}</span>
+                        <span className="text-xs font-semibold">{c.value}%</span>
                       </div>
                     ))}
                   </div>
@@ -969,133 +1301,169 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
             </div>
           )}
 
-          {/* AI Analysis Buttons */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Card className="bg-card/80 border-primary/10">
-              <CardHeader className="p-4 pb-2">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-serif flex items-center gap-2"><Activity className="w-4 h-4 text-accent" />Root Cause Analysis</CardTitle>
-                  <Button onClick={handleAnalyzePatterns} disabled={rootCauseLoading} size="sm" className="bg-primary text-primary-foreground">
-                    {rootCauseLoading ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <TrendingUp className="w-3 h-3 mr-1" />}Analyze Patterns
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="p-4 pt-2">
-                {!rootCauseResult && !rootCauseLoading && !rootCauseError && (
-                  <p className="text-sm text-muted-foreground text-center py-4">Click "Analyze Patterns" to discover recurring issues and automation opportunities</p>
-                )}
-                {rootCauseLoading && (
-                  <div className="text-center py-6"><Loader2 className="w-6 h-6 animate-spin text-primary mx-auto mb-2" /><p className="text-sm text-muted-foreground">Analyzing patterns...</p></div>
-                )}
-                {rootCauseError && <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">{rootCauseError}<Button onClick={handleAnalyzePatterns} size="sm" variant="outline" className="mt-2 ml-2">Retry</Button></div>}
-                {rootCauseResult && (
-                  <div className="space-y-3">
-                    {rootCauseResult.recurring_issues && Array.isArray(rootCauseResult.recurring_issues) && (
-                      <div>
-                        <h5 className="text-xs font-semibold mb-1">Recurring Issues</h5>
+          {/* Root Cause Analysis -- Full-width, all data visible, no click-to-expand */}
+          <Card className="bg-card/80 border-primary/10">
+            <CardHeader className="p-4 pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-serif flex items-center gap-2"><Activity className="w-4 h-4 text-accent" />Root Cause Analysis</CardTitle>
+                <Button onClick={handleAnalyzePatterns} disabled={rootCauseLoading} size="sm" className="bg-primary text-primary-foreground">
+                  {rootCauseLoading ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <TrendingUp className="w-3 h-3 mr-1" />}{rootCauseResult ? 'Re-analyze' : 'Analyze Patterns'}
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4 pt-2">
+              {!rootCauseResult && !rootCauseLoading && !rootCauseError && (
+                <p className="text-sm text-muted-foreground text-center py-4">Click "Analyze Patterns" to discover recurring issues and automation opportunities</p>
+              )}
+              {rootCauseLoading && (
+                <div className="text-center py-6"><Loader2 className="w-6 h-6 animate-spin text-primary mx-auto mb-2" /><p className="text-sm text-muted-foreground">Analyzing patterns...</p></div>
+              )}
+              {rootCauseError && <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">{rootCauseError}<Button onClick={handleAnalyzePatterns} size="sm" variant="outline" className="mt-2 ml-2">Retry</Button></div>}
+              {rootCauseResult && (
+                <div className="space-y-5">
+                  {/* Recurring Issues -- displayed as a table/grid, fully visible */}
+                  {rootCauseResult.recurring_issues && Array.isArray(rootCauseResult.recurring_issues) && rootCauseResult.recurring_issues.length > 0 && (
+                    <div>
+                      <h5 className="text-xs font-semibold mb-2 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5 text-orange-500" />Recurring Issues ({rootCauseResult.recurring_issues.length})</h5>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {rootCauseResult.recurring_issues.map((issue: any, i: number) => (
-                          <div key={i} className="mb-2 bg-secondary/30 rounded-lg p-2">
-                            <button onClick={() => setExpandedIssue(expandedIssue === i ? null : i)} className="w-full flex items-center justify-between text-left">
-                              <span className="text-sm font-medium">{issue?.issue}</span>
-                              {expandedIssue === i ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                            </button>
-                            {expandedIssue === i && (
-                              <div className="mt-2 space-y-1 text-xs">
-                                <p><span className="text-muted-foreground">Frequency:</span> {issue?.frequency}</p>
-                                <p><span className="text-muted-foreground">Impact:</span> {issue?.impact_score}</p>
-                                <p><span className="text-muted-foreground">Root Cause:</span> {issue?.root_cause}</p>
-                                {Array.isArray(issue?.affected_departments) && <p><span className="text-muted-foreground">Departments:</span> {issue.affected_departments.join(', ')}</p>}
+                          <div key={i} className="bg-secondary/30 rounded-lg p-3 border border-primary/5">
+                            <p className="text-sm font-semibold mb-2">{issue?.issue}</p>
+                            <div className="space-y-1.5 text-xs">
+                              <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground">Frequency</span>
+                                <Badge variant="outline" className="text-[10px]">{issue?.frequency}</Badge>
                               </div>
-                            )}
+                              <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground">Impact</span>
+                                <Badge className={`text-[10px] ${(issue?.impact_score ?? '').toLowerCase().includes('high') ? 'bg-red-100 text-red-700' : (issue?.impact_score ?? '').toLowerCase().includes('medium') ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>{issue?.impact_score}</Badge>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground">Root Cause:</span>
+                                <p className="text-foreground mt-0.5">{issue?.root_cause}</p>
+                              </div>
+                              {Array.isArray(issue?.affected_departments) && issue.affected_departments.length > 0 && (
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {issue.affected_departments.map((dept: string, di: number) => (
+                                    <Badge key={di} variant="outline" className="text-[9px] bg-primary/5">{dept}</Badge>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         ))}
                       </div>
-                    )}
-                    {rootCauseResult.automation_opportunities && Array.isArray(rootCauseResult.automation_opportunities) && (
-                      <div>
-                        <h5 className="text-xs font-semibold mb-1">Automation Opportunities</h5>
+                    </div>
+                  )}
+
+                  {/* Automation Opportunities */}
+                  {rootCauseResult.automation_opportunities && Array.isArray(rootCauseResult.automation_opportunities) && rootCauseResult.automation_opportunities.length > 0 && (
+                    <div>
+                      <h5 className="text-xs font-semibold mb-2 flex items-center gap-1.5"><Zap className="w-3.5 h-3.5 text-accent" />Automation Opportunities ({rootCauseResult.automation_opportunities.length})</h5>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {rootCauseResult.automation_opportunities.map((opp: any, i: number) => (
-                          <div key={i} className="flex items-start gap-2 text-xs mb-1"><Zap className="w-3 h-3 text-accent flex-shrink-0 mt-0.5" /><div><span className="font-medium">{opp?.process}</span> -- {opp?.recommendation} <Badge variant="outline" className="text-[9px] ml-1">{opp?.automation_potential}</Badge></div></div>
+                          <div key={i} className="bg-accent/5 border border-accent/10 rounded-lg p-3 flex items-start gap-3">
+                            <Zap className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium">{opp?.process}</p>
+                              <p className="text-xs text-muted-foreground mt-0.5">{opp?.recommendation}</p>
+                              <div className="flex items-center gap-2 mt-1.5">
+                                <Badge variant="outline" className="text-[9px]">Vol: {opp?.current_volume}</Badge>
+                                <Badge className="text-[9px] bg-accent/20 text-accent-foreground">{opp?.automation_potential}</Badge>
+                              </div>
+                            </div>
+                          </div>
                         ))}
                       </div>
-                    )}
-                    {rootCauseResult.trending_patterns && Array.isArray(rootCauseResult.trending_patterns) && (
-                      <div>
-                        <h5 className="text-xs font-semibold mb-1">Trending Patterns</h5>
-                        <ul className="space-y-1">{rootCauseResult.trending_patterns.map((p: string, i: number) => <li key={i} className="text-xs flex items-start gap-1"><TrendingUp className="w-3 h-3 text-primary flex-shrink-0 mt-0.5" />{p}</li>)}</ul>
+                    </div>
+                  )}
+
+                  {/* Trending Patterns + Priority Actions side by side */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {rootCauseResult.trending_patterns && Array.isArray(rootCauseResult.trending_patterns) && rootCauseResult.trending_patterns.length > 0 && (
+                      <div className="bg-secondary/20 rounded-lg p-3">
+                        <h5 className="text-xs font-semibold mb-2 flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5 text-primary" />Trending Patterns</h5>
+                        <ul className="space-y-1.5">{rootCauseResult.trending_patterns.map((p: string, i: number) => (
+                          <li key={i} className="text-xs flex items-start gap-2"><span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span><span>{p}</span></li>
+                        ))}</ul>
                       </div>
                     )}
-                    {rootCauseResult.priority_actions && Array.isArray(rootCauseResult.priority_actions) && (
-                      <div>
-                        <h5 className="text-xs font-semibold mb-1">Priority Actions</h5>
-                        <ul className="space-y-1">{rootCauseResult.priority_actions.map((a: string, i: number) => <li key={i} className="text-xs flex items-start gap-1"><AlertTriangle className="w-3 h-3 text-orange-500 flex-shrink-0 mt-0.5" />{a}</li>)}</ul>
+                    {rootCauseResult.priority_actions && Array.isArray(rootCauseResult.priority_actions) && rootCauseResult.priority_actions.length > 0 && (
+                      <div className="bg-orange-50/50 rounded-lg p-3">
+                        <h5 className="text-xs font-semibold mb-2 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5 text-orange-500" />Priority Actions</h5>
+                        <ul className="space-y-1.5">{rootCauseResult.priority_actions.map((a: string, i: number) => (
+                          <li key={i} className="text-xs flex items-start gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-orange-500 flex-shrink-0 mt-0.5" /><span>{a}</span></li>
+                        ))}</ul>
                       </div>
                     )}
                   </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/80 border-primary/10">
-              <CardHeader className="p-4 pb-2">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-serif flex items-center gap-2"><Clock className="w-4 h-4 text-accent" />SLA Predictions</CardTitle>
-                  <Button onClick={handlePredictBreaches} disabled={slaLoading} size="sm" className="bg-primary text-primary-foreground">
-                    {slaLoading ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <AlertTriangle className="w-3 h-3 mr-1" />}Predict Breaches
-                  </Button>
                 </div>
-              </CardHeader>
-              <CardContent className="p-4 pt-2">
-                {!slaResult && !slaLoading && !slaError && (
-                  <p className="text-sm text-muted-foreground text-center py-4">Click "Predict Breaches" to identify tickets at risk of SLA violation</p>
-                )}
-                {slaLoading && (
-                  <div className="text-center py-6"><Loader2 className="w-6 h-6 animate-spin text-primary mx-auto mb-2" /><p className="text-sm text-muted-foreground">Predicting breaches...</p></div>
-                )}
-                {slaError && <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">{slaError}<Button onClick={handlePredictBreaches} size="sm" variant="outline" className="mt-2 ml-2">Retry</Button></div>}
-                {slaResult && (
-                  <div className="space-y-3">
-                    {slaResult.overall_sla_health && (
-                      <div className="flex items-center gap-2 p-2 bg-secondary/30 rounded-lg">
-                        <Activity className="w-4 h-4 text-primary" />
-                        <div>
-                          <p className="text-xs font-semibold">Overall SLA Health</p>
-                          <p className="text-sm">{slaResult.overall_sla_health}</p>
-                        </div>
-                        {slaResult.total_at_risk != null && <Badge className="ml-auto bg-red-100 text-red-700">{slaResult.total_at_risk} at risk</Badge>}
+              )}
+            </CardContent>
+          </Card>
+
+          {/* SLA Predictions */}
+          <Card className="bg-card/80 border-primary/10">
+            <CardHeader className="p-4 pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-serif flex items-center gap-2"><Clock className="w-4 h-4 text-accent" />SLA Predictions</CardTitle>
+                <Button onClick={handlePredictBreaches} disabled={slaLoading} size="sm" className="bg-primary text-primary-foreground">
+                  {slaLoading ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <AlertTriangle className="w-3 h-3 mr-1" />}Predict Breaches
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4 pt-2">
+              {!slaResult && !slaLoading && !slaError && (
+                <p className="text-sm text-muted-foreground text-center py-4">Click "Predict Breaches" to identify tickets at risk of SLA violation</p>
+              )}
+              {slaLoading && (
+                <div className="text-center py-6"><Loader2 className="w-6 h-6 animate-spin text-primary mx-auto mb-2" /><p className="text-sm text-muted-foreground">Predicting breaches...</p></div>
+              )}
+              {slaError && <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">{slaError}<Button onClick={handlePredictBreaches} size="sm" variant="outline" className="mt-2 ml-2">Retry</Button></div>}
+              {slaResult && (
+                <div className="space-y-4">
+                  {slaResult.overall_sla_health && (
+                    <div className="flex items-center gap-3 p-3 bg-secondary/30 rounded-lg">
+                      <Activity className="w-5 h-5 text-primary" />
+                      <div className="flex-1">
+                        <p className="text-xs font-semibold">Overall SLA Health</p>
+                        <p className="text-sm">{slaResult.overall_sla_health}</p>
                       </div>
-                    )}
-                    {slaResult.at_risk_tickets && Array.isArray(slaResult.at_risk_tickets) && (
-                      <div>
-                        <h5 className="text-xs font-semibold mb-1">At-Risk Tickets</h5>
+                      {slaResult.total_at_risk != null && <Badge className="bg-red-100 text-red-700 text-sm px-3">{slaResult.total_at_risk} at risk</Badge>}
+                    </div>
+                  )}
+                  {slaResult.at_risk_tickets && Array.isArray(slaResult.at_risk_tickets) && slaResult.at_risk_tickets.length > 0 && (
+                    <div>
+                      <h5 className="text-xs font-semibold mb-2">At-Risk Tickets</h5>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {slaResult.at_risk_tickets.map((t: any, i: number) => (
-                          <div key={i} className="mb-2 bg-red-50/50 border border-red-200/50 rounded p-2 text-xs">
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="font-mono font-medium">{t?.ticket_id}</span>
-                              <Badge className={`text-[9px] ${(t?.breach_probability ?? '').includes('High') || (t?.breach_probability ?? '').includes('high') ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white'}`}>{t?.breach_probability}</Badge>
+                          <div key={i} className="bg-red-50/50 border border-red-200/50 rounded-lg p-3">
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="font-mono text-sm font-medium">{t?.ticket_id}</span>
+                              <Badge className={`text-[10px] ${(t?.breach_probability ?? '').toLowerCase().includes('high') ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white'}`}>{t?.breach_probability}</Badge>
                             </div>
-                            <p className="text-sm mb-1">{t?.subject}</p>
-                            <div className="flex gap-3 text-muted-foreground">
-                              <span>Age: {t?.current_age_hours}h</span>
+                            <p className="text-sm mb-2">{t?.subject}</p>
+                            <div className="flex gap-3 text-xs text-muted-foreground mb-1.5">
+                              <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{t?.current_age_hours}h age</span>
                               <span>Deadline: {t?.sla_deadline_hours}h</span>
                               <span>Complexity: {t?.complexity}</span>
                             </div>
-                            {t?.recommended_action && <p className="mt-1 text-primary font-medium">{t.recommended_action}</p>}
+                            {t?.recommended_action && <p className="text-xs text-primary font-medium bg-primary/5 rounded px-2 py-1">{t.recommended_action}</p>}
                           </div>
                         ))}
                       </div>
-                    )}
-                    {slaResult.recommendations && Array.isArray(slaResult.recommendations) && (
-                      <div>
-                        <h5 className="text-xs font-semibold mb-1">Recommendations</h5>
-                        <ul className="space-y-1">{slaResult.recommendations.map((r: string, i: number) => <li key={i} className="text-xs flex items-start gap-1"><CheckCircle2 className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5" />{r}</li>)}</ul>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+                    </div>
+                  )}
+                  {slaResult.recommendations && Array.isArray(slaResult.recommendations) && slaResult.recommendations.length > 0 && (
+                    <div className="bg-green-50/50 rounded-lg p-3">
+                      <h5 className="text-xs font-semibold mb-2">Recommendations</h5>
+                      <ul className="space-y-1.5">{slaResult.recommendations.map((r: string, i: number) => <li key={i} className="text-xs flex items-start gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-green-500 flex-shrink-0 mt-0.5" />{r}</li>)}</ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </ScrollArea>
     </div>
@@ -1528,7 +1896,7 @@ export default function Page() {
       case 'concierge': return <EmployeeConciergeScreen sampleMode={sampleMode} activeAgentId={activeAgentId} setActiveAgentId={setActiveAgentId} />
       case 'mytickets': return <EmployeeTicketsScreen sampleMode={sampleMode} />
       case 'orgchart': return <EmployeeOrgChartScreen sampleMode={sampleMode} />
-      case 'dashboard': return <HRTicketDashboardScreen sampleMode={sampleMode} activeAgentId={activeAgentId} setActiveAgentId={setActiveAgentId} />
+      case 'dashboard': return <HROverviewDashboardScreen sampleMode={sampleMode} activeAgentId={activeAgentId} setActiveAgentId={setActiveAgentId} onNavigate={setActiveScreen} />
       case 'tickets': return <HRTicketDashboardScreen sampleMode={sampleMode} activeAgentId={activeAgentId} setActiveAgentId={setActiveAgentId} />
       case 'analytics': return <HRAnalyticsDashboardScreen sampleMode={sampleMode} activeAgentId={activeAgentId} setActiveAgentId={setActiveAgentId} />
       case 'compliance': return <HRComplianceScreen sampleMode={sampleMode} activeAgentId={activeAgentId} setActiveAgentId={setActiveAgentId} />
@@ -1550,7 +1918,7 @@ export default function Page() {
                 <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                   <Users className="w-5 h-5 text-primary-foreground" />
                 </div>
-                <span className="font-serif text-lg font-bold tracking-tight">HR Nexus</span>
+                <span className="font-serif text-lg font-bold tracking-tight">Lyzr HR Assistant</span>
               </div>
             )}
             <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="p-1 rounded hover:bg-secondary/50 transition-colors">
@@ -1601,27 +1969,24 @@ export default function Page() {
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Top Header */}
-          <header className="h-14 border-b border-primary/20 flex items-center justify-between px-4 bg-card/50 backdrop-blur-sm flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <Badge className={role === 'hr' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'}>{role === 'hr' ? 'HR Staff' : 'Employee'}</Badge>
-              {activeAgentId && (
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Loader2 className="w-3 h-3 animate-spin text-primary" />
-                  <span>Agent processing...</span>
-                </div>
-              )}
-            </div>
-            <div className="flex items-center gap-3">
+          <header className="border-b border-primary/20 bg-card/50 backdrop-blur-sm flex-shrink-0">
+            <div className="h-14 flex items-center justify-between px-4">
               <div className="flex items-center gap-2">
-                <Label htmlFor="sample-toggle" className="text-xs text-muted-foreground">Sample Data</Label>
-                <Switch id="sample-toggle" checked={sampleMode} onCheckedChange={setSampleMode} />
+                <Badge className={role === 'hr' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'}>{role === 'hr' ? 'HR Staff' : 'Employee'}</Badge>
               </div>
-              <button className="relative p-1.5 rounded-lg hover:bg-secondary/50 transition-colors">
-                <Bell className="w-5 h-5 text-muted-foreground" />
-                {sampleMode && <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-card" />}
-              </button>
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center"><User className="w-4 h-4 text-primary" /></div>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="sample-toggle" className="text-xs text-muted-foreground">Sample Data</Label>
+                  <Switch id="sample-toggle" checked={sampleMode} onCheckedChange={setSampleMode} />
+                </div>
+                <button className="relative p-1.5 rounded-lg hover:bg-secondary/50 transition-colors">
+                  <Bell className="w-5 h-5 text-muted-foreground" />
+                  {sampleMode && <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-card" />}
+                </button>
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center"><User className="w-4 h-4 text-primary" /></div>
+              </div>
             </div>
+            <AgentThinkingBar activeAgentId={activeAgentId} />
           </header>
 
           {/* Screen Content */}
@@ -1639,14 +2004,14 @@ export default function Page() {
             </div>
             <ScrollArea className="flex-1">
               <div className="p-3 space-y-2">
-                {AGENTS_INFO.map(agent => (
-                  <div key={agent.id} className={`p-3 rounded-lg border transition-all ${activeAgentId === agent.id ? 'border-primary bg-primary/5 shadow-sm' : 'border-primary/10 bg-card/80'}`}>
+                {Object.entries(AGENTS_INFO).map(([id, agent]) => (
+                  <div key={id} className={`p-3 rounded-lg border transition-all ${activeAgentId === id ? 'border-primary bg-primary/5 shadow-sm' : 'border-primary/10 bg-card/80'}`}>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className={`w-2 h-2 rounded-full flex-shrink-0 ${activeAgentId === agent.id ? 'bg-green-500 animate-pulse' : 'bg-muted-foreground/30'}`} />
+                      <span className={`w-2 h-2 rounded-full flex-shrink-0 ${activeAgentId === id ? 'bg-green-500 animate-pulse' : 'bg-muted-foreground/30'}`} />
                       <span className="text-sm font-medium">{agent.name}</span>
                     </div>
                     <p className="text-xs text-muted-foreground ml-4">{agent.purpose}</p>
-                    <p className="text-[10px] font-mono text-muted-foreground/50 ml-4 mt-1">{agent.id}</p>
+                    <p className="text-[10px] font-mono text-muted-foreground/50 ml-4 mt-1">{id}</p>
                   </div>
                 ))}
               </div>
