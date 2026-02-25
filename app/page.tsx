@@ -188,7 +188,7 @@ function AgentThinkingBar({ activeAgentId }: { activeAgentId: string | null }) {
   const currentStep = agent.steps[stepIndex % agent.steps.length]
 
   return (
-    <div className="w-full bg-primary/5 border-b border-primary/10 px-4 py-1.5 flex items-center gap-3 overflow-hidden">
+    <div className="w-full glass-thinking px-4 py-1.5 flex items-center gap-3 overflow-hidden">
       <div className="flex items-center gap-2 flex-shrink-0">
         <div className="relative flex items-center justify-center w-4 h-4">
           <span className="absolute inline-flex h-full w-full rounded-full bg-accent/40 animate-ping" />
@@ -287,7 +287,7 @@ function DateRangeFilter({ value, onChange }: { value: string; onChange: (v: str
     <div className="flex items-center gap-1.5">
       <Clock className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
       {DATE_RANGES.map(r => (
-        <button key={r.id} onClick={() => onChange(r.id)} className={`px-2.5 py-1 text-xs rounded-md transition-colors ${value === r.id ? 'bg-primary text-primary-foreground' : 'bg-secondary/50 text-secondary-foreground hover:bg-secondary'}`}>
+        <button key={r.id} onClick={() => onChange(r.id)} className={`px-2.5 py-1 text-xs rounded-lg transition-all ${value === r.id ? 'glass-nav-active text-primary-foreground shadow-sm' : 'glass-light text-secondary-foreground hover:bg-white/40'}`}>
           {r.label}
         </button>
       ))}
@@ -314,7 +314,7 @@ class ErrorBoundary extends React.Component<
           <div className="text-center p-8 max-w-md">
             <h2 className="text-xl font-semibold mb-2">Something went wrong</h2>
             <p className="text-muted-foreground mb-4 text-sm">{this.state.error}</p>
-            <button onClick={() => this.setState({ hasError: false, error: '' })} className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm">Try again</button>
+            <button onClick={() => this.setState({ hasError: false, error: '' })} className="px-4 py-2 bg-primary text-primary-foreground rounded-xl text-sm glass-btn">Try again</button>
           </div>
         </div>
       )
@@ -366,7 +366,7 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
   return (
     <div className="flex h-full">
       <div className="flex-1 flex flex-col">
-        <div className="p-4 border-b border-primary/20">
+        <div className="p-4 border-b border-white/30">
           <h2 className="font-serif text-2xl font-semibold">AI Concierge</h2>
           <p className="text-sm text-muted-foreground">Your personal HR assistant -- ask anything about policies, leave, payroll, and more</p>
         </div>
@@ -386,13 +386,13 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
                     {msg.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                   </div>
                   <div>
-                    <div className={`rounded-lg p-3 ${msg.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-card border border-primary/10 shadow-sm'}`}>
+                    <div className={`rounded-2xl p-3 ${msg.role === 'user' ? 'glass-chat-user text-primary-foreground' : 'glass-chat-agent'}`}>
                       {msg.role === 'user' ? <p className="text-sm">{msg.content}</p> : renderMarkdown(msg.content)}
                     </div>
                     {msg.agentData?.actions_taken && Array.isArray(msg.agentData.actions_taken) && msg.agentData.actions_taken.length > 0 && (
                       <div className="mt-2 space-y-1">
                         {msg.agentData.actions_taken.map((action: any, i: number) => (
-                          <div key={i} className="flex items-center gap-2 text-xs bg-secondary/50 rounded px-2 py-1">
+                          <div key={i} className="flex items-center gap-2 text-xs glass-light rounded-lg px-2 py-1">
                             <Zap className="w-3 h-3 text-accent" />
                             <span className="text-muted-foreground">{action?.agent}: {action?.result}</span>
                           </div>
@@ -408,7 +408,7 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
                     {msg.agentData?.follow_up_suggestions && Array.isArray(msg.agentData.follow_up_suggestions) && (
                       <div className="mt-2 flex flex-wrap gap-1">
                         {msg.agentData.follow_up_suggestions.map((s: string, i: number) => (
-                          <button key={i} onClick={() => handleSend(s)} className="text-xs bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-full px-3 py-1 transition-colors">{s}</button>
+                          <button key={i} onClick={() => handleSend(s)} className="text-xs glass-light hover:bg-white/40 text-secondary-foreground rounded-full px-3 py-1 transition-all">{s}</button>
                         ))}
                       </div>
                     )}
@@ -422,7 +422,7 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
             <div className="flex justify-start">
               <div className="flex items-start gap-2">
                 <div className="w-8 h-8 rounded-full bg-accent text-accent-foreground flex items-center justify-center"><Bot className="w-4 h-4" /></div>
-                <div className="bg-card border border-primary/10 rounded-lg p-3 shadow-sm">
+                <div className="glass-chat-agent rounded-2xl p-3">
                   <div className="flex gap-1">
                     <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" />
                     <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }} />
@@ -433,7 +433,7 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
             </div>
           )}
         </div>
-        <div className="p-4 border-t border-primary/20">
+        <div className="p-4 border-t border-white/30 glass-header">
           <div className="flex gap-2">
             <Input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask Lyzr HR Assistant anything..." className="flex-1" onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }} disabled={loading} />
             <Button onClick={() => handleSend()} disabled={loading || !input.trim()} className="bg-primary text-primary-foreground">
@@ -443,14 +443,14 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
         </div>
       </div>
       {showQuickActions && (
-        <div className="w-56 border-l border-primary/20 p-4 hidden lg:block">
+        <div className="w-56 border-l border-white/30 p-4 hidden lg:block glass-panel">
           <div className="flex items-center justify-between mb-3">
             <h4 className="font-serif text-sm font-semibold">Quick Actions</h4>
             <button onClick={() => setShowQuickActions(false)}><X className="w-4 h-4 text-muted-foreground" /></button>
           </div>
           <div className="space-y-2">
             {quickActions.map(action => (
-              <button key={action} onClick={() => handleSend(action)} className="w-full text-left text-sm bg-secondary/50 hover:bg-secondary rounded-lg px-3 py-2 transition-colors flex items-center gap-2">
+              <button key={action} onClick={() => handleSend(action)} className="w-full text-left text-sm glass-light rounded-xl px-3 py-2 transition-all hover:bg-white/40 flex items-center gap-2">
                 <ArrowRight className="w-3 h-3 text-primary" />{action}
               </button>
             ))}
@@ -472,14 +472,14 @@ function EmployeeTicketsScreen({ sampleMode }: { sampleMode: boolean }) {
   return (
     <div className="flex h-full">
       <div className={`${selectedTicket ? 'w-1/2' : 'w-full'} flex flex-col`}>
-        <div className="p-4 border-b border-primary/20">
+        <div className="p-4 border-b border-white/30">
           <h2 className="font-serif text-2xl font-semibold">My Tickets</h2>
           <p className="text-sm text-muted-foreground">Track your HR requests and their status</p>
         </div>
-        <div className="p-4 border-b border-primary/20">
+        <div className="p-4 border-b border-white/30">
           <div className="flex gap-2 flex-wrap">
             {filters.map(f => (
-              <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1 text-sm rounded-full capitalize transition-colors ${filter === f ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'}`}>{f === 'in-progress' ? 'In Progress' : f}</button>
+              <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1 text-sm rounded-full capitalize transition-all ${filter === f ? 'glass-nav-active text-primary-foreground' : 'glass-light text-secondary-foreground hover:bg-white/40'}`}>{f === 'in-progress' ? 'In Progress' : f}</button>
             ))}
           </div>
         </div>
@@ -492,7 +492,7 @@ function EmployeeTicketsScreen({ sampleMode }: { sampleMode: boolean }) {
               </div>
             )}
             {filtered.map(ticket => (
-              <button key={ticket.id} onClick={() => setSelectedTicket(ticket)} className={`w-full text-left p-4 rounded-lg border transition-all hover:shadow-md ${selectedTicket?.id === ticket.id ? 'border-primary bg-card shadow-md' : 'border-primary/10 bg-card/80 hover:border-primary/30'}`}>
+              <button key={ticket.id} onClick={() => setSelectedTicket(ticket)} className={`w-full text-left p-4 rounded-xl transition-all hover:shadow-lg ${selectedTicket?.id === ticket.id ? 'glass-heavy border-primary/30 shadow-lg' : 'glass-light hover:bg-white/40'}`}>
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
@@ -514,8 +514,8 @@ function EmployeeTicketsScreen({ sampleMode }: { sampleMode: boolean }) {
         </ScrollArea>
       </div>
       {selectedTicket && (
-        <div className="w-1/2 border-l border-primary/20 flex flex-col">
-          <div className="p-4 border-b border-primary/20 flex items-center justify-between">
+        <div className="w-1/2 border-l border-white/30 flex flex-col glass-panel">
+          <div className="p-4 border-b border-white/30 flex items-center justify-between">
             <div>
               <h3 className="font-serif text-lg font-semibold">{selectedTicket.subject}</h3>
               <p className="text-xs text-muted-foreground">{selectedTicket.id} -- {selectedTicket.category}</p>
@@ -529,7 +529,7 @@ function EmployeeTicketsScreen({ sampleMode }: { sampleMode: boolean }) {
                 <Badge className={getPriorityColor(selectedTicket.priority)}>{selectedTicket.priority}</Badge>
                 <Badge variant="outline">{selectedTicket.department}</Badge>
               </div>
-              <Card className="bg-card/80 border-primary/10">
+              <Card className="glass-card">
                 <CardContent className="p-4">
                   <p className="text-sm">{selectedTicket.description}</p>
                 </CardContent>
@@ -595,7 +595,7 @@ function EmployeeOrgChartScreen({ sampleMode }: { sampleMode: boolean }) {
     if (!matches && !childMatches && searchTerm) return null
     return (
       <div key={node.id} style={{ marginLeft: depth * 24 }}>
-        <button onClick={() => setSelectedNode(node)} className={`flex items-center gap-2 w-full text-left p-2 rounded-lg transition-colors hover:bg-secondary/50 ${selectedNode?.id === node.id ? 'bg-secondary' : ''}`}>
+        <button onClick={() => setSelectedNode(node)} className={`flex items-center gap-2 w-full text-left p-2 rounded-xl transition-all hover:bg-white/40 ${selectedNode?.id === node.id ? 'glass-heavy' : ''}`}>
           {hasChildren && <button onClick={(e) => { e.stopPropagation(); toggleExpand(node.id) }}>{isExpanded ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />}</button>}
           {!hasChildren && <span className="w-4" />}
           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-semibold">{node.name.split(' ').map(n => n[0]).join('')}</div>
@@ -613,11 +613,11 @@ function EmployeeOrgChartScreen({ sampleMode }: { sampleMode: boolean }) {
   return (
     <div className="flex h-full">
       <div className="flex-1 flex flex-col">
-        <div className="p-4 border-b border-primary/20">
+        <div className="p-4 border-b border-white/30">
           <h2 className="font-serif text-2xl font-semibold">Organization Chart</h2>
           <p className="text-sm text-muted-foreground">Explore the company hierarchy and find colleagues</p>
         </div>
-        <div className="p-4 border-b border-primary/20">
+        <div className="p-4 border-b border-white/30">
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search by name, role, or department..." className="pl-9" />
@@ -636,7 +636,7 @@ function EmployeeOrgChartScreen({ sampleMode }: { sampleMode: boolean }) {
       </div>
       {selectedNode && (
         <Dialog open={!!selectedNode} onOpenChange={() => setSelectedNode(null)}>
-          <DialogContent className="bg-card">
+          <DialogContent className="glass-dialog rounded-2xl">
             <DialogHeader>
               <DialogTitle className="font-serif">{selectedNode.name}</DialogTitle>
               <DialogDescription>{selectedNode.role}</DialogDescription>
@@ -692,7 +692,7 @@ function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-primary/20">
+      <div className="p-4 border-b border-white/30">
         <div className="flex items-center justify-between mb-2">
           <div>
             <h2 className="font-serif text-2xl font-semibold">Dashboard</h2>
@@ -707,7 +707,7 @@ function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId
           {sampleMode ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
               {overviewMetrics.map(m => (
-                <Card key={m.label} className="bg-card/80 border-primary/10 shadow-sm hover:shadow-md transition-shadow">
+                <Card key={m.label} className="glass-metric shimmer">
                   <CardContent className="p-4">
                     <div className={`w-9 h-9 rounded-lg ${m.bg} flex items-center justify-center mb-2`}>
                       <m.icon className={`w-5 h-5 ${m.color}`} />
@@ -728,7 +728,7 @@ function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId
           {sampleMode && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {/* Critical / High Priority Tickets */}
-              <Card className="lg:col-span-2 bg-card/80 border-primary/10">
+              <Card className="lg:col-span-2 glass-card">
                 <CardHeader className="p-4 pb-2">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-sm font-serif flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-red-500" />Priority Tickets</CardTitle>
@@ -741,7 +741,7 @@ function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId
                   ) : (
                     <div className="space-y-2">
                       {criticalTickets.map(ticket => (
-                        <div key={ticket.id} className="flex items-center gap-3 p-2.5 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors">
+                        <div key={ticket.id} className="flex items-center gap-3 p-2.5 rounded-xl glass-light hover:bg-white/40 transition-all">
                           <Badge className={`text-[9px] px-1.5 py-0 ${getPriorityColor(ticket.priority)}`}>{ticket.priority}</Badge>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium truncate">{ticket.subject}</p>
@@ -763,7 +763,7 @@ function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId
               </Card>
 
               {/* Category Breakdown */}
-              <Card className="bg-card/80 border-primary/10">
+              <Card className="glass-card">
                 <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">By Category</CardTitle></CardHeader>
                 <CardContent className="p-4 pt-2">
                   <div className="space-y-2.5">
@@ -785,26 +785,26 @@ function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId
           {sampleMode && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* AI Quick Actions */}
-              <Card className="bg-card/80 border-primary/10">
+              <Card className="glass-card">
                 <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif flex items-center gap-2"><Sparkles className="w-4 h-4 text-accent" />AI Quick Actions</CardTitle></CardHeader>
                 <CardContent className="p-4 pt-2">
                   <div className="grid grid-cols-2 gap-2">
-                    <button onClick={() => onNavigate('analytics')} className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors text-left">
+                    <button onClick={() => onNavigate('analytics')} className="p-3 rounded-xl glass-light hover:bg-white/40 transition-all text-left">
                       <TrendingUp className="w-5 h-5 text-primary mb-1.5" />
                       <p className="text-sm font-medium">Analyze Patterns</p>
                       <p className="text-xs text-muted-foreground">Root cause analysis</p>
                     </button>
-                    <button onClick={() => onNavigate('analytics')} className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors text-left">
+                    <button onClick={() => onNavigate('analytics')} className="p-3 rounded-xl glass-light hover:bg-white/40 transition-all text-left">
                       <Clock className="w-5 h-5 text-primary mb-1.5" />
                       <p className="text-sm font-medium">Predict Breaches</p>
                       <p className="text-xs text-muted-foreground">SLA risk forecast</p>
                     </button>
-                    <button onClick={() => onNavigate('compliance')} className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors text-left">
+                    <button onClick={() => onNavigate('compliance')} className="p-3 rounded-xl glass-light hover:bg-white/40 transition-all text-left">
                       <Shield className="w-5 h-5 text-primary mb-1.5" />
                       <p className="text-sm font-medium">Scan Risks</p>
                       <p className="text-xs text-muted-foreground">Compliance check</p>
                     </button>
-                    <button onClick={() => onNavigate('tickets')} className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors text-left">
+                    <button onClick={() => onNavigate('tickets')} className="p-3 rounded-xl glass-light hover:bg-white/40 transition-all text-left">
                       <Bot className="w-5 h-5 text-primary mb-1.5" />
                       <p className="text-sm font-medium">AI Copilot</p>
                       <p className="text-xs text-muted-foreground">Ticket resolution</p>
@@ -814,12 +814,12 @@ function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId
               </Card>
 
               {/* Team Workload */}
-              <Card className="bg-card/80 border-primary/10">
+              <Card className="glass-card">
                 <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif flex items-center gap-2"><Users className="w-4 h-4 text-primary" />Team Workload</CardTitle></CardHeader>
                 <CardContent className="p-4 pt-2">
                   <div className="space-y-2.5">
                     {teamWorkload.map(member => (
-                      <div key={member.name} className="flex items-center gap-3 p-2 rounded-lg bg-secondary/20">
+                      <div key={member.name} className="flex items-center gap-3 p-2 rounded-xl glass-light">
                         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-semibold flex-shrink-0">
                           {member.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                         </div>
@@ -838,7 +838,7 @@ function HROverviewDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId
 
           {/* Recent Activity */}
           {sampleMode && (
-            <Card className="bg-card/80 border-primary/10">
+            <Card className="glass-card">
               <CardHeader className="p-4 pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-sm font-serif">Recent Tickets</CardTitle>
@@ -920,8 +920,8 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
   return (
     <div className="flex h-full">
       {/* Left: Ticket List */}
-      <div className="w-80 border-r border-primary/20 flex flex-col flex-shrink-0">
-        <div className="p-3 border-b border-primary/20">
+      <div className="w-80 border-r border-white/30 flex flex-col flex-shrink-0 glass-panel">
+        <div className="p-3 border-b border-white/30">
           <h2 className="font-serif text-lg font-semibold mb-2">Tickets</h2>
           <div className="mb-2"><DateRangeFilter value={dateRange} onChange={setDateRange} /></div>
           <div className="relative mb-2">
@@ -930,7 +930,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
           </div>
           <div className="flex gap-1 flex-wrap">
             {['all', 'open', 'in-progress', 'escalated', 'resolved'].map(s => (
-              <button key={s} onClick={() => setStatusFilter(s)} className={`px-2 py-0.5 text-[10px] rounded-full capitalize ${statusFilter === s ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}`}>{s === 'in-progress' ? 'Progress' : s}</button>
+              <button key={s} onClick={() => setStatusFilter(s)} className={`px-2 py-0.5 text-[10px] rounded-full capitalize transition-all ${statusFilter === s ? 'glass-nav-active text-primary-foreground' : 'glass-light text-secondary-foreground hover:bg-white/30'}`}>{s === 'in-progress' ? 'Progress' : s}</button>
             ))}
           </div>
         </div>
@@ -939,7 +939,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
             {filtered.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">No tickets found</p>
             ) : filtered.map(ticket => (
-              <button key={ticket.id} onClick={() => { setSelectedTicket(ticket); setCopilotResult(null); setCopilotError(''); setReplyText('') }} className={`w-full text-left p-2.5 rounded-lg transition-all text-sm ${selectedTicket?.id === ticket.id ? 'bg-card border border-primary/30 shadow-sm' : 'hover:bg-card/50 border border-transparent'}`}>
+              <button key={ticket.id} onClick={() => { setSelectedTicket(ticket); setCopilotResult(null); setCopilotError(''); setReplyText('') }} className={`w-full text-left p-2.5 rounded-xl transition-all text-sm ${selectedTicket?.id === ticket.id ? 'glass-heavy border-white/40 shadow-md' : 'hover:bg-white/30 border border-transparent'}`}>
                 <div className="flex items-center gap-1.5 mb-0.5">
                   <span className="text-[10px] font-mono text-muted-foreground">{ticket.id}</span>
                   <Badge className={`text-[9px] px-1.5 py-0 ${getPriorityColor(ticket.priority)}`}>{ticket.priority}</Badge>
@@ -959,7 +959,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
       <div className="flex-1 flex flex-col min-w-0">
         {selectedTicket ? (
           <>
-            <div className="p-4 border-b border-primary/20">
+            <div className="p-4 border-b border-white/30">
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-serif text-lg font-semibold">{selectedTicket.subject}</h3>
@@ -982,14 +982,14 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
                 <Separator className="bg-primary/10" />
                 <div>
                   <h4 className="font-serif text-sm font-semibold mb-2">Description</h4>
-                  <p className="text-sm bg-card/80 p-3 rounded-lg border border-primary/10">{selectedTicket.description}</p>
+                  <p className="text-sm glass-light p-3 rounded-xl">{selectedTicket.description}</p>
                 </div>
                 <div>
                   <h4 className="font-serif text-sm font-semibold mb-2">Conversation</h4>
                   {Array.isArray(selectedTicket.messages) && selectedTicket.messages.length > 0 ? (
                     <div className="space-y-3">
                       {selectedTicket.messages.map((m, i) => (
-                        <div key={i} className={`p-3 rounded-lg text-sm ${m.role === 'hr' ? 'bg-accent/10 border border-accent/20 ml-6' : 'bg-card border border-primary/10 mr-6'}`}>
+                        <div key={i} className={`p-3 rounded-xl text-sm ${m.role === 'hr' ? 'glass-light border-accent/20 ml-6' : 'glass-card mr-6'}`}>
                           <div className="flex items-center gap-2 mb-1">
                             <span className="font-semibold text-xs">{m.role === 'hr' ? 'HR Team' : 'Employee'}</span>
                             <span className="text-xs text-muted-foreground">{m.time}</span>
@@ -1002,7 +1002,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
                     <p className="text-sm text-muted-foreground">No conversation yet</p>
                   )}
                 </div>
-                <div className="flex items-center gap-2 p-3 bg-secondary/50 rounded-lg">
+                <div className="flex items-center gap-2 p-3 glass-light rounded-xl">
                   <Clock className="w-4 h-4 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">SLA: {selectedTicket.slaHours}h elapsed of {selectedTicket.slaDeadline}h deadline</span>
                   <Progress value={Math.min((selectedTicket.slaHours / selectedTicket.slaDeadline) * 100, 100)} className="flex-1 h-2" />
@@ -1014,7 +1014,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
                     placeholder="Type your reply to the employee..."
-                    className="min-h-[80px] text-sm resize-none"
+                    className="min-h-[80px] text-sm resize-none glass-input rounded-xl"
                     rows={3}
                   />
                   <div className="flex items-center justify-between mt-2">
@@ -1038,8 +1038,8 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
       </div>
 
       {/* Right: AI Assistant */}
-      <div className="w-80 border-l border-primary/20 flex flex-col flex-shrink-0">
-        <div className="p-3 border-b border-primary/20">
+      <div className="w-80 border-l border-white/30 flex flex-col flex-shrink-0 glass-panel">
+        <div className="p-3 border-b border-white/30">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-accent" />
             <h3 className="font-serif text-sm font-semibold">AI Resolution Copilot</h3>
@@ -1074,18 +1074,18 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
             {copilotResult && (
               <div className="space-y-3">
                 {copilotResult.drafted_reply && (
-                  <Card className="bg-card/80 border-primary/10">
+                  <Card className="glass-card">
                     <CardHeader className="p-3 pb-1"><CardTitle className="text-xs font-serif">Drafted Reply</CardTitle></CardHeader>
                     <CardContent className="p-3 pt-1">
                       {renderMarkdown(copilotResult.drafted_reply)}
-                      <Button onClick={() => setReplyText(copilotResult.drafted_reply)} size="sm" variant="outline" className="w-full mt-2 text-xs border-accent/30 text-accent-foreground hover:bg-accent/10">
+                      <Button onClick={() => setReplyText(copilotResult.drafted_reply)} size="sm" variant="outline" className="w-full mt-2 text-xs glass-light border-accent/30 text-accent-foreground hover:bg-accent/10 glass-btn rounded-xl">
                         <ArrowRight className="w-3 h-3 mr-1" />Use This Reply
                       </Button>
                     </CardContent>
                   </Card>
                 )}
                 {copilotResult.resolution_steps && Array.isArray(copilotResult.resolution_steps) && (
-                  <Card className="bg-card/80 border-primary/10">
+                  <Card className="glass-card">
                     <CardHeader className="p-3 pb-1"><CardTitle className="text-xs font-serif">Resolution Steps</CardTitle></CardHeader>
                     <CardContent className="p-3 pt-1">
                       <ol className="space-y-1">
@@ -1100,23 +1100,23 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
                   </Card>
                 )}
                 {copilotResult.compliance_notes && (
-                  <Card className="bg-card/80 border-primary/10">
+                  <Card className="glass-card">
                     <CardHeader className="p-3 pb-1"><CardTitle className="text-xs font-serif">Compliance Notes</CardTitle></CardHeader>
                     <CardContent className="p-3 pt-1">{renderMarkdown(copilotResult.compliance_notes)}</CardContent>
                   </Card>
                 )}
                 {copilotResult.estimated_resolution_time && (
-                  <div className="flex items-center gap-2 text-sm bg-secondary/50 rounded-lg p-2">
+                  <div className="flex items-center gap-2 text-sm glass-light rounded-xl p-2">
                     <Clock className="w-4 h-4 text-muted-foreground" />
                     <span>Est. Resolution: {copilotResult.estimated_resolution_time}</span>
                   </div>
                 )}
                 {copilotResult.precedent_cases && Array.isArray(copilotResult.precedent_cases) && copilotResult.precedent_cases.length > 0 && (
-                  <Card className="bg-card/80 border-primary/10">
+                  <Card className="glass-card">
                     <CardHeader className="p-3 pb-1"><CardTitle className="text-xs font-serif">Precedent Cases</CardTitle></CardHeader>
                     <CardContent className="p-3 pt-1 space-y-2">
                       {copilotResult.precedent_cases.map((c: any, i: number) => (
-                        <div key={i} className="text-sm bg-secondary/30 rounded p-2">
+                        <div key={i} className="text-sm glass-light rounded-xl p-2">
                           <p className="font-medium text-xs">{c?.case_id}</p>
                           <p className="text-xs text-muted-foreground">{c?.summary}</p>
                           <p className="text-xs mt-1"><span className="font-medium">Outcome:</span> {c?.outcome}</p>
@@ -1127,7 +1127,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
                   </Card>
                 )}
                 {copilotResult.follow_up_actions && Array.isArray(copilotResult.follow_up_actions) && (
-                  <Card className="bg-card/80 border-primary/10">
+                  <Card className="glass-card">
                     <CardHeader className="p-3 pb-1"><CardTitle className="text-xs font-serif">Follow-up Actions</CardTitle></CardHeader>
                     <CardContent className="p-3 pt-1">
                       <ul className="space-y-1">
@@ -1219,7 +1219,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-primary/20">
+      <div className="p-4 border-b border-white/30">
         <div className="flex items-center justify-between mb-2">
           <div>
             <h2 className="font-serif text-2xl font-semibold">Analytics Dashboard</h2>
@@ -1234,7 +1234,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
           {sampleMode && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {metrics.map(m => (
-                <Card key={m.label} className="bg-card/80 border-primary/10 shadow-sm hover:shadow-md transition-shadow">
+                <Card key={m.label} className="glass-metric shimmer">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
                       <m.icon className="w-5 h-5 text-primary" />
@@ -1253,7 +1253,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
           {/* Charts Row -- Improved area chart + pie-like distribution */}
           {sampleMode && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <Card className="lg:col-span-2 bg-card/80 border-primary/10">
+              <Card className="lg:col-span-2 glass-card">
                 <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">Ticket Volume Trend (4 Weeks)</CardTitle></CardHeader>
                 <CardContent className="p-4 pt-2">
                   {/* Y-axis labels + chart area */}
@@ -1306,14 +1306,14 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
                     </div>
                   </div>
                   {/* Legend */}
-                  <div className="flex items-center gap-5 mt-3 pt-2 border-t border-primary/10">
+                  <div className="flex items-center gap-5 mt-3 pt-2 border-t border-white/30">
                     <div className="flex items-center gap-1.5"><div className="w-3 h-2.5 rounded-sm bg-[hsl(27,61%,26%)]/40" /><span className="text-[10px] text-muted-foreground">Weeks 1-3</span></div>
                     <div className="flex items-center gap-1.5"><div className="w-3 h-2.5 rounded-sm bg-[hsl(27,61%,26%)]" /><span className="text-[10px] text-muted-foreground">Current Week</span></div>
                     <div className="flex items-center gap-1.5"><div className="w-3 h-2.5 rounded-sm bg-[hsl(43,75%,38%)]" /><span className="text-[10px] text-muted-foreground">Peak Day</span></div>
                   </div>
                 </CardContent>
               </Card>
-              <Card className="bg-card/80 border-primary/10">
+              <Card className="glass-card">
                 <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">Category Distribution</CardTitle></CardHeader>
                 <CardContent className="p-4 pt-2">
                   {/* Donut-style ring */}
@@ -1356,7 +1356,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
           )}
 
           {/* Root Cause Analysis -- Full-width, all data visible, no click-to-expand */}
-          <Card className="bg-card/80 border-primary/10">
+          <Card className="glass-card">
             <CardHeader className="p-4 pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-serif flex items-center gap-2"><Activity className="w-4 h-4 text-accent" />Root Cause Analysis</CardTitle>
@@ -1381,7 +1381,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
                       <h5 className="text-xs font-semibold mb-2 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5 text-orange-500" />Recurring Issues ({rootCauseResult.recurring_issues.length})</h5>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {rootCauseResult.recurring_issues.map((issue: any, i: number) => (
-                          <div key={i} className="bg-secondary/30 rounded-lg p-3 border border-primary/5">
+                          <div key={i} className="glass-light rounded-xl p-3">
                             <p className="text-sm font-semibold mb-2">{issue?.issue}</p>
                             <div className="space-y-1.5 text-xs">
                               <div className="flex items-center justify-between">
@@ -1416,7 +1416,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
                       <h5 className="text-xs font-semibold mb-2 flex items-center gap-1.5"><Zap className="w-3.5 h-3.5 text-accent" />Automation Opportunities ({rootCauseResult.automation_opportunities.length})</h5>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {rootCauseResult.automation_opportunities.map((opp: any, i: number) => (
-                          <div key={i} className="bg-accent/5 border border-accent/10 rounded-lg p-3 flex items-start gap-3">
+                          <div key={i} className="glass-light rounded-xl p-3 flex items-start gap-3">
                             <Zap className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium">{opp?.process}</p>
@@ -1435,7 +1435,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
                   {/* Trending Patterns + Priority Actions side by side */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {rootCauseResult.trending_patterns && Array.isArray(rootCauseResult.trending_patterns) && rootCauseResult.trending_patterns.length > 0 && (
-                      <div className="bg-secondary/20 rounded-lg p-3">
+                      <div className="glass-light rounded-xl p-3">
                         <h5 className="text-xs font-semibold mb-2 flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5 text-primary" />Trending Patterns</h5>
                         <ul className="space-y-1.5">{rootCauseResult.trending_patterns.map((p: string, i: number) => (
                           <li key={i} className="text-xs flex items-start gap-2"><span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span><span>{p}</span></li>
@@ -1443,7 +1443,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
                       </div>
                     )}
                     {rootCauseResult.priority_actions && Array.isArray(rootCauseResult.priority_actions) && rootCauseResult.priority_actions.length > 0 && (
-                      <div className="bg-orange-50/50 rounded-lg p-3">
+                      <div className="glass-light rounded-xl p-3">
                         <h5 className="text-xs font-semibold mb-2 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5 text-orange-500" />Priority Actions</h5>
                         <ul className="space-y-1.5">{rootCauseResult.priority_actions.map((a: string, i: number) => (
                           <li key={i} className="text-xs flex items-start gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-orange-500 flex-shrink-0 mt-0.5" /><span>{a}</span></li>
@@ -1457,7 +1457,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
           </Card>
 
           {/* SLA Predictions */}
-          <Card className="bg-card/80 border-primary/10">
+          <Card className="glass-card">
             <CardHeader className="p-4 pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-serif flex items-center gap-2"><Clock className="w-4 h-4 text-accent" />SLA Predictions</CardTitle>
@@ -1477,7 +1477,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
               {slaResult && (
                 <div className="space-y-4">
                   {slaResult.overall_sla_health && (
-                    <div className="flex items-center gap-3 p-3 bg-secondary/30 rounded-lg">
+                    <div className="flex items-center gap-3 p-3 glass-card rounded-xl">
                       <Activity className="w-5 h-5 text-primary" />
                       <div className="flex-1">
                         <p className="text-xs font-semibold">Overall SLA Health</p>
@@ -1491,7 +1491,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
                       <h5 className="text-xs font-semibold mb-2">At-Risk Tickets</h5>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {slaResult.at_risk_tickets.map((t: any, i: number) => (
-                          <div key={i} className="bg-red-50/50 border border-red-200/50 rounded-lg p-3">
+                          <div key={i} className="glass-light rounded-xl p-3 border border-red-200/30">
                             <div className="flex items-center justify-between mb-1.5">
                               <span className="font-mono text-sm font-medium">{t?.ticket_id}</span>
                               <Badge className={`text-[10px] ${(t?.breach_probability ?? '').toLowerCase().includes('high') ? 'bg-red-500 text-white' : 'bg-yellow-500 text-white'}`}>{t?.breach_probability}</Badge>
@@ -1509,7 +1509,7 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
                     </div>
                   )}
                   {slaResult.recommendations && Array.isArray(slaResult.recommendations) && slaResult.recommendations.length > 0 && (
-                    <div className="bg-green-50/50 rounded-lg p-3">
+                    <div className="glass-light rounded-xl p-3">
                       <h5 className="text-xs font-semibold mb-2">Recommendations</h5>
                       <ul className="space-y-1.5">{slaResult.recommendations.map((r: string, i: number) => <li key={i} className="text-xs flex items-start gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-green-500 flex-shrink-0 mt-0.5" />{r}</li>)}</ul>
                     </div>
@@ -1556,7 +1556,7 @@ function HRComplianceScreen({ sampleMode, activeAgentId, setActiveAgentId }: { s
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-primary/20 flex items-center justify-between">
+      <div className="p-4 border-b border-white/30 flex items-center justify-between">
         <div>
           <h2 className="font-serif text-2xl font-semibold">Compliance & Risk</h2>
           <p className="text-sm text-muted-foreground">AI-powered compliance risk scanning and monitoring</p>
@@ -1582,11 +1582,11 @@ function HRComplianceScreen({ sampleMode, activeAgentId, setActiveAgentId }: { s
             <>
               {/* Risk Summary & Overall Level */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <Card className="lg:col-span-2 bg-card/80 border-primary/10">
+                <Card className="lg:col-span-2 glass-card">
                   <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">Risk Summary</CardTitle></CardHeader>
                   <CardContent className="p-4 pt-2">{renderMarkdown(result?.risk_summary ?? 'No summary available')}</CardContent>
                 </Card>
-                <Card className="bg-card/80 border-primary/10">
+                <Card className="glass-card">
                   <CardContent className="p-4 flex flex-col items-center justify-center h-full">
                     <p className="text-xs text-muted-foreground mb-2">Overall Risk Level</p>
                     <Badge className={`text-lg px-4 py-1 ${getSeverityColor(result?.overall_risk_level ?? '')}`}>{result?.overall_risk_level ?? 'Unknown'}</Badge>
@@ -1600,7 +1600,7 @@ function HRComplianceScreen({ sampleMode, activeAgentId, setActiveAgentId }: { s
                   <h3 className="font-serif text-lg font-semibold mb-3">Flagged Cases</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {result.flagged_cases.map((c: any, i: number) => (
-                      <Card key={i} className="bg-card/80 border-primary/10 shadow-sm hover:shadow-md transition-shadow">
+                      <Card key={i} className="glass-metric shimmer">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between mb-2">
                             <span className="font-mono text-sm font-medium">{c?.case_id}</span>
@@ -1610,7 +1610,7 @@ function HRComplianceScreen({ sampleMode, activeAgentId, setActiveAgentId }: { s
                           <p className="text-sm mb-2">{c?.description}</p>
                           {c?.policy_reference && <p className="text-xs text-muted-foreground">Policy: {c.policy_reference}</p>}
                           {c?.recommended_action && (
-                            <div className="mt-2 bg-secondary/50 rounded p-2"><p className="text-xs font-medium text-primary">{c.recommended_action}</p></div>
+                            <div className="mt-2 glass-light rounded-xl p-2"><p className="text-xs font-medium text-primary">{c.recommended_action}</p></div>
                           )}
                         </CardContent>
                       </Card>
@@ -1622,7 +1622,7 @@ function HRComplianceScreen({ sampleMode, activeAgentId, setActiveAgentId }: { s
               {/* Legal Exposure & Preventive Measures */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {result.legal_exposure_areas && Array.isArray(result.legal_exposure_areas) && (
-                  <Card className="bg-card/80 border-primary/10">
+                  <Card className="glass-card">
                     <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-red-500" />Legal Exposure Areas</CardTitle></CardHeader>
                     <CardContent className="p-4 pt-2">
                       <ul className="space-y-2">{result.legal_exposure_areas.map((a: string, i: number) => (
@@ -1632,7 +1632,7 @@ function HRComplianceScreen({ sampleMode, activeAgentId, setActiveAgentId }: { s
                   </Card>
                 )}
                 {result.preventive_measures && Array.isArray(result.preventive_measures) && (
-                  <Card className="bg-card/80 border-primary/10">
+                  <Card className="glass-card">
                     <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" />Preventive Measures</CardTitle></CardHeader>
                     <CardContent className="p-4 pt-2">
                       <ul className="space-y-2">{result.preventive_measures.map((m: string, i: number) => (
@@ -1695,14 +1695,14 @@ function HRKnowledgeBaseScreen({ sampleMode }: { sampleMode: boolean }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-primary/20">
+      <div className="p-4 border-b border-white/30">
         <h2 className="font-serif text-2xl font-semibold">Knowledge Base</h2>
         <p className="text-sm text-muted-foreground">Manage HR policy documents for AI-powered retrieval</p>
       </div>
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-4">
           {/* Upload Area */}
-          <Card className="bg-card/80 border-primary/10 border-dashed">
+          <Card className="glass-card border-dashed">
             <CardContent className="p-6 text-center">
               <Upload className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
               <p className="text-sm font-medium mb-1">Upload Policy Documents</p>
@@ -1736,7 +1736,7 @@ function HRKnowledgeBaseScreen({ sampleMode }: { sampleMode: boolean }) {
             )}
             <div className="space-y-2">
               {docList.map((doc, i) => (
-                <Card key={i} className="bg-card/80 border-primary/10">
+                <Card key={i} className="glass-card">
                   <CardContent className="p-3 flex items-center gap-3">
                     <FileText className="w-8 h-8 text-primary flex-shrink-0" />
                     <div className="flex-1 min-w-0">
@@ -1765,7 +1765,7 @@ function HRKnowledgeBaseScreen({ sampleMode }: { sampleMode: boolean }) {
 function HRSettingsScreen({ sampleMode }: { sampleMode: boolean }) {
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-primary/20">
+      <div className="p-4 border-b border-white/30">
         <h2 className="font-serif text-2xl font-semibold">Settings & Integrations</h2>
         <p className="text-sm text-muted-foreground">Configure integrations, workflows, permissions, and notifications</p>
       </div>
@@ -1786,7 +1786,7 @@ function HRSettingsScreen({ sampleMode }: { sampleMode: boolean }) {
                   { name: 'Payroll System', desc: 'Payslips, tax forms, deductions', status: sampleMode ? 'Connected' : 'Not configured' },
                   { name: 'ITSM Platform', desc: 'IT tickets, access requests', status: sampleMode ? 'Syncing' : 'Not configured' },
                 ].map(int => (
-                  <Card key={int.name} className="bg-card/80 border-primary/10">
+                  <Card key={int.name} className="glass-card">
                     <CardContent className="p-4">
                       <h4 className="font-serif text-sm font-semibold mb-1">{int.name}</h4>
                       <p className="text-xs text-muted-foreground mb-3">{int.desc}</p>
@@ -1802,20 +1802,20 @@ function HRSettingsScreen({ sampleMode }: { sampleMode: boolean }) {
 
             <TabsContent value="workflows">
               <div className="space-y-4">
-                <Card className="bg-card/80 border-primary/10">
+                <Card className="glass-card">
                   <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">Escalation Rules</CardTitle></CardHeader>
                   <CardContent className="p-4 pt-2 space-y-2">
                     {sampleMode ? (
                       <>
-                        <div className="flex items-center justify-between p-2 bg-secondary/30 rounded">
+                        <div className="flex items-center justify-between p-2 glass-light rounded-xl">
                           <div><p className="text-sm font-medium">SLA Breach Auto-Escalation</p><p className="text-xs text-muted-foreground">Escalate to manager when SLA is 80% consumed</p></div>
                           <Switch defaultChecked />
                         </div>
-                        <div className="flex items-center justify-between p-2 bg-secondary/30 rounded">
+                        <div className="flex items-center justify-between p-2 glass-light rounded-xl">
                           <div><p className="text-sm font-medium">Negative Sentiment Escalation</p><p className="text-xs text-muted-foreground">Route to senior HR when sentiment is negative</p></div>
                           <Switch defaultChecked />
                         </div>
-                        <div className="flex items-center justify-between p-2 bg-secondary/30 rounded">
+                        <div className="flex items-center justify-between p-2 glass-light rounded-xl">
                           <div><p className="text-sm font-medium">Compliance Risk Alert</p><p className="text-xs text-muted-foreground">Notify legal team on high-risk compliance flags</p></div>
                           <Switch />
                         </div>
@@ -1823,20 +1823,20 @@ function HRSettingsScreen({ sampleMode }: { sampleMode: boolean }) {
                     ) : <p className="text-sm text-muted-foreground">Enable sample data to view workflow rules</p>}
                   </CardContent>
                 </Card>
-                <Card className="bg-card/80 border-primary/10">
+                <Card className="glass-card">
                   <CardHeader className="p-4 pb-2"><CardTitle className="text-sm font-serif">Auto-Assignment Rules</CardTitle></CardHeader>
                   <CardContent className="p-4 pt-2 space-y-2">
                     {sampleMode ? (
                       <>
-                        <div className="flex items-center justify-between p-2 bg-secondary/30 rounded">
+                        <div className="flex items-center justify-between p-2 glass-light rounded-xl">
                           <div><p className="text-sm font-medium">Leave Requests</p><p className="text-xs text-muted-foreground">Auto-assign to Benefits team</p></div>
                           <Badge variant="outline">Active</Badge>
                         </div>
-                        <div className="flex items-center justify-between p-2 bg-secondary/30 rounded">
+                        <div className="flex items-center justify-between p-2 glass-light rounded-xl">
                           <div><p className="text-sm font-medium">Payroll Issues</p><p className="text-xs text-muted-foreground">Auto-assign to Payroll specialists</p></div>
                           <Badge variant="outline">Active</Badge>
                         </div>
-                        <div className="flex items-center justify-between p-2 bg-secondary/30 rounded">
+                        <div className="flex items-center justify-between p-2 glass-light rounded-xl">
                           <div><p className="text-sm font-medium">IT Access Requests</p><p className="text-xs text-muted-foreground">Route to IT Helpdesk</p></div>
                           <Badge variant="outline">Active</Badge>
                         </div>
@@ -1848,13 +1848,13 @@ function HRSettingsScreen({ sampleMode }: { sampleMode: boolean }) {
             </TabsContent>
 
             <TabsContent value="permissions">
-              <Card className="bg-card/80 border-primary/10">
+              <Card className="glass-card">
                 <CardContent className="p-4">
                   {sampleMode ? (
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead>
-                          <tr className="border-b border-primary/10">
+                          <tr className="border-b border-white/30">
                             <th className="text-left p-2 font-serif">Role</th>
                             <th className="text-left p-2">View Tickets</th>
                             <th className="text-left p-2">Manage Tickets</th>
@@ -1887,7 +1887,7 @@ function HRSettingsScreen({ sampleMode }: { sampleMode: boolean }) {
             </TabsContent>
 
             <TabsContent value="notifications">
-              <Card className="bg-card/80 border-primary/10">
+              <Card className="glass-card">
                 <CardContent className="p-4 space-y-3">
                   {[
                     { label: 'New ticket assignments', desc: 'Get notified when a ticket is assigned to you' },
@@ -1896,7 +1896,7 @@ function HRSettingsScreen({ sampleMode }: { sampleMode: boolean }) {
                     { label: 'Compliance risk alerts', desc: 'Alert when new compliance risks are detected' },
                     { label: 'Weekly digest', desc: 'Summary of ticket volume and key metrics' },
                   ].map((n, i) => (
-                    <div key={i} className="flex items-center justify-between p-2 bg-secondary/30 rounded">
+                    <div key={i} className="flex items-center justify-between p-2 glass-light rounded-xl">
                       <div><p className="text-sm font-medium">{n.label}</p><p className="text-xs text-muted-foreground">{n.desc}</p></div>
                       <Switch defaultChecked={i < 3} />
                     </div>
@@ -1964,9 +1964,9 @@ export default function Page() {
     <ErrorBoundary>
       <div className="min-h-screen bg-background text-foreground flex">
         {/* Sidebar */}
-        <aside className={`${sidebarCollapsed ? 'w-16' : 'w-64'} flex-shrink-0 bg-card border-r border-primary/20 flex flex-col transition-all duration-300`}>
+        <aside className={`${sidebarCollapsed ? 'w-16' : 'w-64'} flex-shrink-0 glass-sidebar flex flex-col transition-all duration-300`}>
           {/* Logo */}
-          <div className="p-4 border-b border-primary/20 flex items-center justify-between">
+          <div className="p-4 border-b border-white/30 flex items-center justify-between">
             {!sidebarCollapsed && (
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
@@ -1975,13 +1975,13 @@ export default function Page() {
                 <span className="font-serif text-lg font-bold tracking-tight">Lyzr HR Assistant</span>
               </div>
             )}
-            <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="p-1 rounded hover:bg-secondary/50 transition-colors">
+            <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="p-1 rounded-lg hover:bg-white/40 transition-all">
               {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
           </div>
 
           {/* Role Switch */}
-          <div className={`p-3 border-b border-primary/20 ${sidebarCollapsed ? 'flex justify-center' : ''}`}>
+          <div className={`p-3 border-b border-white/30 ${sidebarCollapsed ? 'flex justify-center' : ''}`}>
             {!sidebarCollapsed ? (
               <div className="flex items-center justify-between">
                 <Label className="text-xs text-muted-foreground">Role</Label>
@@ -1992,7 +1992,7 @@ export default function Page() {
                 </div>
               </div>
             ) : (
-              <button onClick={() => setRole(role === 'employee' ? 'hr' : 'employee')} className="p-1.5 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors" title={`Switch to ${role === 'employee' ? 'HR' : 'Employee'}`}>
+              <button onClick={() => setRole(role === 'employee' ? 'hr' : 'employee')} className="p-1.5 rounded-xl glass-light hover:bg-white/40 transition-all" title={`Switch to ${role === 'employee' ? 'HR' : 'Employee'}`}>
                 <User className="w-4 h-4" />
               </button>
             )}
@@ -2001,7 +2001,7 @@ export default function Page() {
           {/* Navigation */}
           <nav className="flex-1 p-2 space-y-1">
             {navItems.map(item => (
-              <button key={item.id} onClick={() => setActiveScreen(item.id)} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${activeScreen === item.id ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-secondary/50 text-foreground'}`} title={sidebarCollapsed ? item.label : undefined}>
+              <button key={item.id} onClick={() => setActiveScreen(item.id)} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm glass-nav-item ${activeScreen === item.id ? 'glass-nav-active text-primary-foreground' : 'text-foreground'}`} title={sidebarCollapsed ? item.label : undefined}>
                 <item.icon className="w-4 h-4 flex-shrink-0" />
                 {!sidebarCollapsed && <span>{item.label}</span>}
               </button>
@@ -2010,7 +2010,7 @@ export default function Page() {
 
           {/* Agent Status */}
           {!sidebarCollapsed && (
-            <div className="p-3 border-t border-primary/20">
+            <div className="p-3 border-t border-white/30">
               <button onClick={() => setShowAgentPanel(!showAgentPanel)} className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors w-full">
                 <Activity className="w-3 h-3" />
                 <span>AI Agents</span>
@@ -2023,7 +2023,7 @@ export default function Page() {
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* Top Header */}
-          <header className="border-b border-primary/20 bg-card/50 backdrop-blur-sm flex-shrink-0">
+          <header className="glass-header flex-shrink-0">
             <div className="h-14 flex items-center justify-between px-4">
               <div className="flex items-center gap-2">
                 <Badge className={role === 'hr' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'}>{role === 'hr' ? 'HR Staff' : 'Employee'}</Badge>
@@ -2033,7 +2033,7 @@ export default function Page() {
                   <Label htmlFor="sample-toggle" className="text-xs text-muted-foreground">Sample Data</Label>
                   <Switch id="sample-toggle" checked={sampleMode} onCheckedChange={setSampleMode} />
                 </div>
-                <button className="relative p-1.5 rounded-lg hover:bg-secondary/50 transition-colors">
+                <button className="relative p-1.5 rounded-lg hover:bg-white/40 transition-all">
                   <Bell className="w-5 h-5 text-muted-foreground" />
                   {sampleMode && <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-card" />}
                 </button>
@@ -2051,15 +2051,15 @@ export default function Page() {
 
         {/* Agent Info Panel */}
         {showAgentPanel && (
-          <div className="w-72 border-l border-primary/20 bg-card flex flex-col flex-shrink-0">
-            <div className="p-3 border-b border-primary/20 flex items-center justify-between">
+          <div className="w-72 border-l border-white/30 glass-panel flex flex-col flex-shrink-0">
+            <div className="p-3 border-b border-white/30 flex items-center justify-between">
               <h3 className="font-serif text-sm font-semibold">AI Agent Status</h3>
               <button onClick={() => setShowAgentPanel(false)}><X className="w-4 h-4 text-muted-foreground" /></button>
             </div>
             <ScrollArea className="flex-1">
               <div className="p-3 space-y-2">
                 {Object.entries(AGENTS_INFO).map(([id, agent]) => (
-                  <div key={id} className={`p-3 rounded-lg border transition-all ${activeAgentId === id ? 'border-primary bg-primary/5 shadow-sm' : 'border-primary/10 bg-card/80'}`}>
+                  <div key={id} className={`p-3 rounded-xl transition-all ${activeAgentId === id ? 'glass-heavy border-accent/30 shadow-md' : 'glass-light'}`}>
                     <div className="flex items-center gap-2 mb-1">
                       <span className={`w-2 h-2 rounded-full flex-shrink-0 ${activeAgentId === id ? 'bg-green-500 animate-pulse' : 'bg-muted-foreground/30'}`} />
                       <span className="text-sm font-medium">{agent.name}</span>
