@@ -6,6 +6,7 @@ import { useRAGKnowledgeBase } from '@/lib/ragKnowledgeBase'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -875,6 +876,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
   const [copilotResult, setCopilotResult] = useState<any>(null)
   const [copilotLoading, setCopilotLoading] = useState(false)
   const [copilotError, setCopilotError] = useState('')
+  const [replyText, setReplyText] = useState('')
 
   const tickets = sampleMode ? MOCK_TICKETS : []
   const filtered = tickets.filter(t => {
@@ -889,6 +891,13 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
     const prio = { critical: 0, high: 1, medium: 2, low: 3 }
     return (prio[a.priority] ?? 4) - (prio[b.priority] ?? 4)
   })
+
+  const handleSendReply = () => {
+    if (!replyText.trim() || !selectedTicket) return
+    const newMessage = { role: 'hr', content: replyText.trim(), time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+    setSelectedTicket({ ...selectedTicket, messages: [...(selectedTicket.messages || []), newMessage] })
+    setReplyText('')
+  }
 
   const handleGetSuggestion = async () => {
     if (!selectedTicket) return
@@ -930,7 +939,7 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
             {filtered.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">No tickets found</p>
             ) : filtered.map(ticket => (
-              <button key={ticket.id} onClick={() => { setSelectedTicket(ticket); setCopilotResult(null); setCopilotError('') }} className={`w-full text-left p-2.5 rounded-lg transition-all text-sm ${selectedTicket?.id === ticket.id ? 'bg-card border border-primary/30 shadow-sm' : 'hover:bg-card/50 border border-transparent'}`}>
+              <button key={ticket.id} onClick={() => { setSelectedTicket(ticket); setCopilotResult(null); setCopilotError(''); setReplyText('') }} className={`w-full text-left p-2.5 rounded-lg transition-all text-sm ${selectedTicket?.id === ticket.id ? 'bg-card border border-primary/30 shadow-sm' : 'hover:bg-card/50 border border-transparent'}`}>
                 <div className="flex items-center gap-1.5 mb-0.5">
                   <span className="text-[10px] font-mono text-muted-foreground">{ticket.id}</span>
                   <Badge className={`text-[9px] px-1.5 py-0 ${getPriorityColor(ticket.priority)}`}>{ticket.priority}</Badge>
@@ -998,6 +1007,23 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
                   <span className="text-sm text-muted-foreground">SLA: {selectedTicket.slaHours}h elapsed of {selectedTicket.slaDeadline}h deadline</span>
                   <Progress value={Math.min((selectedTicket.slaHours / selectedTicket.slaDeadline) * 100, 100)} className="flex-1 h-2" />
                 </div>
+                <Separator className="bg-primary/10" />
+                <div>
+                  <h4 className="font-serif text-sm font-semibold mb-2">Reply</h4>
+                  <Textarea
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    placeholder="Type your reply to the employee..."
+                    className="min-h-[80px] text-sm resize-none"
+                    rows={3}
+                  />
+                  <div className="flex items-center justify-between mt-2">
+                    <p className="text-xs text-muted-foreground">{replyText.length > 0 ? `${replyText.length} characters` : 'Use AI Copilot to draft a reply'}</p>
+                    <Button onClick={handleSendReply} disabled={!replyText.trim()} size="sm" className="bg-primary text-primary-foreground">
+                      <Send className="w-3 h-3 mr-1" />Send Reply
+                    </Button>
+                  </div>
+                </div>
               </div>
             </ScrollArea>
           </>
@@ -1050,7 +1076,12 @@ function HRTicketDashboardScreen({ sampleMode, activeAgentId, setActiveAgentId }
                 {copilotResult.drafted_reply && (
                   <Card className="bg-card/80 border-primary/10">
                     <CardHeader className="p-3 pb-1"><CardTitle className="text-xs font-serif">Drafted Reply</CardTitle></CardHeader>
-                    <CardContent className="p-3 pt-1">{renderMarkdown(copilotResult.drafted_reply)}</CardContent>
+                    <CardContent className="p-3 pt-1">
+                      {renderMarkdown(copilotResult.drafted_reply)}
+                      <Button onClick={() => setReplyText(copilotResult.drafted_reply)} size="sm" variant="outline" className="w-full mt-2 text-xs border-accent/30 text-accent-foreground hover:bg-accent/10">
+                        <ArrowRight className="w-3 h-3 mr-1" />Use This Reply
+                      </Button>
+                    </CardContent>
                   </Card>
                 )}
                 {copilotResult.resolution_steps && Array.isArray(copilotResult.resolution_steps) && (
