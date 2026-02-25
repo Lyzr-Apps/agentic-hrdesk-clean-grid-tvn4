@@ -1,0 +1,48 @@
+{
+  "agent_name": "Compliance Risk Agent",
+  "agent_id": "699eb72e74aabe5228cbfa2c",
+  "description": "Scans active and recent tickets to flag sensitive cases, detect potential policy violations, highlight legal exposure risks, and generate compliance risk summaries for HR leadership",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "risk_summary": "string",
+    "flagged_cases": [
+      {
+        "case_id": "string",
+        "severity": "string",
+        "risk_type": "string",
+        "description": "string",
+        "policy_reference": "string",
+        "recommended_action": "string"
+      }
+    ],
+    "legal_exposure_areas": [
+      "string"
+    ],
+    "preventive_measures": [
+      "string"
+    ],
+    "overall_risk_level": "string"
+  },
+  "example_response": {
+    "risk_summary": "sample string",
+    "flagged_cases": [
+      {
+        "case_id": "sample string",
+        "severity": "sample string",
+        "risk_type": "sample string",
+        "description": "sample string",
+        "policy_reference": "sample string",
+        "recommended_action": "sample string"
+      }
+    ],
+    "legal_exposure_areas": [
+      "sample string"
+    ],
+    "preventive_measures": [
+      "sample string"
+    ],
+    "overall_risk_level": "sample string"
+  }
+}

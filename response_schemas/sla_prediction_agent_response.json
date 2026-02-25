@@ -1,0 +1,44 @@
+{
+  "agent_name": "SLA Prediction Agent",
+  "agent_id": "699eb72e74aabe5228cbfa30",
+  "description": "Predicts potential SLA breaches based on ticket age, complexity, assigned workload, and historical resolution times. Suggests reassignment or escalation actions to prevent misses.",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "at_risk_tickets": [
+      {
+        "ticket_id": "string",
+        "subject": "string",
+        "current_age_hours": "string",
+        "sla_deadline_hours": "string",
+        "breach_probability": "string",
+        "complexity": "string",
+        "recommended_action": "string"
+      }
+    ],
+    "overall_sla_health": "string",
+    "total_at_risk": "number",
+    "recommendations": [
+      "string"
+    ]
+  },
+  "example_response": {
+    "at_risk_tickets": [
+      {
+        "ticket_id": "sample string",
+        "subject": "sample string",
+        "current_age_hours": "sample string",
+        "sla_deadline_hours": "sample string",
+        "breach_probability": "sample string",
+        "complexity": "sample string",
+        "recommended_action": "sample string"
+      }
+    ],
+    "overall_sla_health": "sample string",
+    "total_at_risk": 0,
+    "recommendations": [
+      "sample string"
+    ]
+  }
+}

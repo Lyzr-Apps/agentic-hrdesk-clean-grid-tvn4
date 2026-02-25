@@ -1,0 +1,52 @@
+{
+  "agents": {
+    "hr_orchestrator": {
+      "agent_id": "699eb700beec997879afcba7",
+      "name": "HR Orchestrator Agent",
+      "type": "manager"
+    },
+    "policy_retrieval": {
+      "agent_id": "699eb6eb74aabe5228cbf9d7",
+      "name": "Policy Retrieval Agent",
+      "type": "sub-agent",
+      "has_kb": true
+    },
+    "action_execution": {
+      "agent_id": "699eb6ebfd653ab1ab256d46",
+      "name": "Action Execution Agent",
+      "type": "sub-agent"
+    },
+    "sentiment_escalation": {
+      "agent_id": "699eb6ec74aabe5228cbf9d9",
+      "name": "Sentiment & Escalation Agent",
+      "type": "sub-agent"
+    },
+    "resolution_copilot": {
+      "agent_id": "699eb72d97d0e1107b38dc11",
+      "name": "Resolution Copilot Agent",
+      "type": "independent",
+      "has_kb": true
+    },
+    "root_cause": {
+      "agent_id": "699eb72d97d0e1107b38dc15",
+      "name": "Root Cause Analysis Agent",
+      "type": "independent"
+    },
+    "compliance_risk": {
+      "agent_id": "699eb72e74aabe5228cbfa2c",
+      "name": "Compliance Risk Agent",
+      "type": "independent",
+      "has_kb": true
+    },
+    "sla_prediction": {
+      "agent_id": "699eb72e74aabe5228cbfa30",
+      "name": "SLA Prediction Agent",
+      "type": "independent"
+    }
+  },
+  "knowledge_base": {
+    "rag_id": "699eb6c3e9e49857cb7b961e",
+    "name": "HR Policy Knowledge Base",
+    "rag_name": "hrpolicyknowledgebaseam96"
+  }
+}

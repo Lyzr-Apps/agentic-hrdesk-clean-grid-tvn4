@@ -1,0 +1,16 @@
+{
+  "agent_id": "699eb6ec74aabe5228cbf9d9",
+  "agent_name": "Sentiment & Escalation Agent",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "response_schema": {
+    "sentiment": "string",
+    "urgency_level": "number",
+    "sensitive_topics_detected": ["string"],
+    "escalation_required": "boolean",
+    "escalation_reason": "string",
+    "recommended_tone": "string",
+    "risk_flags": ["string"]
+  }
+}

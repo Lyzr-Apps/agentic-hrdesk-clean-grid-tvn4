@@ -1,0 +1,21 @@
+{
+  "agent_id": "699eb6ebfd653ab1ab256d46",
+  "agent_name": "Action Execution Agent",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "response_schema": {
+    "action_type": "string",
+    "status": "string",
+    "reference_number": "string",
+    "action_summary": "string",
+    "details": {
+      "start_date": "string",
+      "end_date": "string",
+      "days_count": "string",
+      "approval_status": "string",
+      "additional_info": "string"
+    },
+    "follow_up_steps": ["string"]
+  }
+}

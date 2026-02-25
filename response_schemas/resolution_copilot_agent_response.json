@@ -1,0 +1,46 @@
+{
+  "agent_name": "Resolution Copilot Agent",
+  "agent_id": "699eb72d97d0e1107b38dc11",
+  "description": "Assists HR staff by drafting contextual ticket replies, suggesting precedent cases from historical data, and recommending step-by-step resolution paths for the selected ticket",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "drafted_reply": "string",
+    "precedent_cases": [
+      {
+        "case_id": "string",
+        "summary": "string",
+        "outcome": "string",
+        "relevance": "string"
+      }
+    ],
+    "resolution_steps": [
+      "string"
+    ],
+    "compliance_notes": "string",
+    "estimated_resolution_time": "string",
+    "follow_up_actions": [
+      "string"
+    ]
+  },
+  "example_response": {
+    "drafted_reply": "sample string",
+    "precedent_cases": [
+      {
+        "case_id": "sample string",
+        "summary": "sample string",
+        "outcome": "sample string",
+        "relevance": "sample string"
+      }
+    ],
+    "resolution_steps": [
+      "sample string"
+    ],
+    "compliance_notes": "sample string",
+    "estimated_resolution_time": "sample string",
+    "follow_up_actions": [
+      "sample string"
+    ]
+  }
+}

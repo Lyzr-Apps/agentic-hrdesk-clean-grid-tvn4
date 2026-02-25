@@ -1,0 +1,28 @@
+{
+  "agent_id": "699eb72d97d0e1107b38dc15",
+  "agent_name": "Root Cause Analysis Agent",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "response_schema": {
+    "recurring_issues": [
+      {
+        "issue": "string",
+        "frequency": "string",
+        "affected_departments": ["string"],
+        "impact_score": "string",
+        "root_cause": "string"
+      }
+    ],
+    "automation_opportunities": [
+      {
+        "process": "string",
+        "current_volume": "string",
+        "automation_potential": "string",
+        "recommendation": "string"
+      }
+    ],
+    "trending_patterns": ["string"],
+    "priority_actions": ["string"]
+  }
+}

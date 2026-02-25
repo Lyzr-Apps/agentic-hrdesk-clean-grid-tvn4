@@ -1,0 +1,20 @@
+{
+  "agent_id": "699eb6eb74aabe5228cbf9d7",
+  "agent_name": "Policy Retrieval Agent",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "response_schema": {
+    "policy_answer": "string",
+    "citations": [
+      {
+        "source": "string",
+        "section": "string",
+        "excerpt": "string"
+      }
+    ],
+    "confidence_level": "string",
+    "related_policies": ["string"],
+    "follow_up_suggestion": "string"
+  }
+}

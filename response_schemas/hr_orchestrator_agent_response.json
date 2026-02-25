@@ -1,0 +1,42 @@
+{
+  "agent_name": "HR Orchestrator Agent",
+  "agent_id": "699eb700beec997879afcba7",
+  "description": "Central brain that interprets employee intent via NLP, classifies queries into domain buckets (payroll, leave, benefits, IT, compliance), detects urgency, delegates to specialized sub-agents, aggregates results, and delivers unified conversational responses.",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "intent_classification": "string",
+    "domain": "string",
+    "response_message": "string",
+    "actions_taken": [
+      {
+        "agent": "string",
+        "action": "string",
+        "result": "string"
+      }
+    ],
+    "escalation_triggered": "boolean",
+    "follow_up_suggestions": [
+      "string"
+    ],
+    "sentiment_assessment": "string"
+  },
+  "example_response": {
+    "intent_classification": "sample string",
+    "domain": "sample string",
+    "response_message": "sample string",
+    "actions_taken": [
+      {
+        "agent": "sample string",
+        "action": "sample string",
+        "result": "sample string"
+      }
+    ],
+    "escalation_triggered": false,
+    "follow_up_suggestions": [
+      "sample string"
+    ],
+    "sentiment_assessment": "sample string"
+  }
+}

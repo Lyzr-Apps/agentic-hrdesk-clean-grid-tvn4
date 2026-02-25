@@ -1,0 +1,23 @@
+{
+  "agent_id": "699eb72e74aabe5228cbfa2c",
+  "agent_name": "Compliance Risk Agent",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "response_schema": {
+    "risk_summary": "string",
+    "flagged_cases": [
+      {
+        "case_id": "string",
+        "severity": "string",
+        "risk_type": "string",
+        "description": "string",
+        "policy_reference": "string",
+        "recommended_action": "string"
+      }
+    ],
+    "legal_exposure_areas": ["string"],
+    "preventive_measures": ["string"],
+    "overall_risk_level": "string"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "agent_name": "Root Cause Analysis Agent",
+  "agent_id": "699eb72d97d0e1107b38dc15",
+  "description": "Analyzes patterns across ticket history to identify recurring issues, surfaces systemic problems by department/category, and suggests automation opportunities to reduce ticket volume",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "recurring_issues": [
+      {
+        "issue": "string",
+        "frequency": "string",
+        "affected_departments": [
+          "string"
+        ],
+        "impact_score": "string",
+        "root_cause": "string"
+      }
+    ],
+    "automation_opportunities": [
+      {
+        "process": "string",
+        "current_volume": "string",
+        "automation_potential": "string",
+        "recommendation": "string"
+      }
+    ],
+    "trending_patterns": [
+      "string"
+    ],
+    "priority_actions": [
+      "string"
+    ]
+  },
+  "example_response": {
+    "recurring_issues": [
+      {
+        "issue": "sample string",
+        "frequency": "sample string",
+        "affected_departments": [
+          "sample string"
+        ],
+        "impact_score": "sample string",
+        "root_cause": "sample string"
+      }
+    ],
+    "automation_opportunities": [
+      {
+        "process": "sample string",
+        "current_volume": "sample string",
+        "automation_potential": "sample string",
+        "recommendation": "sample string"
+      }
+    ],
+    "trending_patterns": [
+      "sample string"
+    ],
+    "priority_actions": [
+      "sample string"
+    ]
+  }
+}

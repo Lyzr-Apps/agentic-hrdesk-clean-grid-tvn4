@@ -1,0 +1,22 @@
+{
+  "agent_id": "699eb72d97d0e1107b38dc11",
+  "agent_name": "Resolution Copilot Agent",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "response_schema": {
+    "drafted_reply": "string",
+    "precedent_cases": [
+      {
+        "case_id": "string",
+        "summary": "string",
+        "outcome": "string",
+        "relevance": "string"
+      }
+    ],
+    "resolution_steps": ["string"],
+    "compliance_notes": "string",
+    "estimated_resolution_time": "string",
+    "follow_up_actions": ["string"]
+  }
+}

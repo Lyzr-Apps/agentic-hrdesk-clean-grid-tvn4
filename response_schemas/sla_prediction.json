@@ -1,0 +1,23 @@
+{
+  "agent_id": "699eb72e74aabe5228cbfa30",
+  "agent_name": "SLA Prediction Agent",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "response_schema": {
+    "at_risk_tickets": [
+      {
+        "ticket_id": "string",
+        "subject": "string",
+        "current_age_hours": "string",
+        "sla_deadline_hours": "string",
+        "breach_probability": "string",
+        "complexity": "string",
+        "recommended_action": "string"
+      }
+    ],
+    "overall_sla_health": "string",
+    "total_at_risk": "number",
+    "recommendations": ["string"]
+  }
+}
