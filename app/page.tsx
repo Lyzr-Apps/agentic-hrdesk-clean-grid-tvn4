@@ -1350,10 +1350,26 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
   const [slaError, setSlaError] = useState('')
   const [dateRange, setDateRange] = useState('30d')
 
+  const tickets = sampleMode ? MOCK_TICKETS : []
+  const openAndActiveTickets = tickets.filter(t => t.status !== 'resolved')
+  const breachedTickets = tickets.filter(t => t.slaHours >= t.slaDeadline && t.status !== 'resolved')
+  const escalatedTickets = tickets.filter(t => t.status === 'escalated')
+  const atRiskTickets = tickets.filter(t => t.status !== 'resolved' && (t.slaHours / t.slaDeadline) >= 0.7)
+  const slaComplianceRate = tickets.length > 0 ? Math.round((tickets.filter(t => t.slaHours < t.slaDeadline || t.status === 'resolved').length / tickets.length) * 100 * 10) / 10 : 0
+
+  // Build detailed ticket data for AI agents
+  const buildTicketDataForAgent = () => {
+    return openAndActiveTickets.map(t => {
+      const breached = t.slaHours >= t.slaDeadline
+      const pctUsed = Math.round((t.slaHours / t.slaDeadline) * 100)
+      return `- ${t.id}: "${t.subject}" | Category: ${t.category} | Priority: ${t.priority} | Status: ${t.status} | SLA: ${t.slaHours}h elapsed of ${t.slaDeadline}h deadline (${pctUsed}% used)${breached ? ' [SLA BREACHED]' : pctUsed >= 70 ? ' [AT RISK]' : ''} | Dept: ${t.department} | Assignee: ${t.assignee}`
+    }).join('\n')
+  }
+
   const metrics = [
-    { label: 'Total Tickets', value: '1,247', icon: Ticket, change: '+12%', changeUp: true },
+    { label: 'Total Tickets', value: tickets.length > 0 ? tickets.length.toString() : '1,247', icon: Ticket, change: '+12%', changeUp: true },
     { label: 'Resolved Today', value: '23', icon: CheckCircle2, change: '+5', changeUp: true },
-    { label: 'SLA Compliance', value: '94.2%', icon: Clock, change: '+1.8%', changeUp: true },
+    { label: 'SLA Compliance', value: tickets.length > 0 ? `${slaComplianceRate}%` : '94.2%', icon: Clock, change: '+1.8%', changeUp: true },
     { label: 'Automation Rate', value: '67%', icon: Zap, change: '+4%', changeUp: true },
   ]
 
@@ -1383,7 +1399,9 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
     setRootCauseResult(null)
     setActiveAgentId(AGENT_IDS.rootCause)
     try {
-      const result = await callAIAgent('Analyze recurring patterns and root causes across all recent HR tickets. Identify automation opportunities.', AGENT_IDS.rootCause)
+      const ticketData = buildTicketDataForAgent()
+      const msg = `Analyze recurring patterns and root causes across these HR tickets. Identify automation opportunities.\n\nCurrent Ticket Data (${openAndActiveTickets.length} active tickets, ${breachedTickets.length} SLA breached, ${escalatedTickets.length} escalated):\n${ticketData}\n\nCategories breakdown: ${['Leave', 'Payroll', 'Benefits', 'IT Access', 'Compliance', 'Onboarding'].map(c => `${c}: ${tickets.filter(t => t.category === c).length}`).join(', ')}`
+      const result = await callAIAgent(msg, AGENT_IDS.rootCause)
       const data = parseAgentResponse(result)
       setRootCauseResult(data)
     } catch {
@@ -1399,7 +1417,9 @@ function HRAnalyticsDashboardScreen({ sampleMode, activeAgentId, setActiveAgentI
     setSlaResult(null)
     setActiveAgentId(AGENT_IDS.slaPrediction)
     try {
-      const result = await callAIAgent('Predict SLA breaches for all currently open tickets and provide recommendations.', AGENT_IDS.slaPrediction)
+      const ticketData = buildTicketDataForAgent()
+      const msg = `Predict SLA breaches for all currently open and active tickets. Focus especially on tickets that have ALREADY BREACHED their SLA or are close to breaching.\n\nCurrent Ticket Data (${openAndActiveTickets.length} active, ${breachedTickets.length} already breached SLA, ${atRiskTickets.length} at risk of breach):\n${ticketData}\n\nIMPORTANT: The following tickets have ALREADY exceeded their SLA deadline and MUST be flagged as high breach probability:\n${breachedTickets.map(t => `- ${t.id}: "${t.subject}" - ${t.slaHours}h elapsed vs ${t.slaDeadline}h deadline (${Math.round((t.slaHours / t.slaDeadline) * 100)}% over) - Status: ${t.status}`).join('\n')}\n\nAlso flag these at-risk tickets (70%+ SLA consumed):\n${atRiskTickets.filter(t => !breachedTickets.includes(t)).map(t => `- ${t.id}: "${t.subject}" - ${t.slaHours}h elapsed vs ${t.slaDeadline}h deadline (${Math.round((t.slaHours / t.slaDeadline) * 100)}% used)`).join('\n') || 'None'}\n\nProvide specific recommendations for each at-risk and breached ticket.`
+      const result = await callAIAgent(msg, AGENT_IDS.slaPrediction)
       const data = parseAgentResponse(result)
       setSlaResult(data)
     } catch {
