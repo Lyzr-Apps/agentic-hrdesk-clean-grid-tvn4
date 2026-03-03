@@ -465,16 +465,71 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
 function EmployeeTicketsScreen({ sampleMode }: { sampleMode: boolean }) {
   const [filter, setFilter] = useState('all')
   const [selectedTicket, setSelectedTicket] = useState<TicketData | null>(null)
-  const tickets = sampleMode ? MOCK_TICKETS.slice(0, 8) : []
+  const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [userTickets, setUserTickets] = useState<TicketData[]>([])
+  const [replyText, setReplyText] = useState('')
+
+  // New ticket form state
+  const [newSubject, setNewSubject] = useState('')
+  const [newCategory, setNewCategory] = useState('Leave')
+  const [newPriority, setNewPriority] = useState<'low' | 'medium' | 'high' | 'critical'>('medium')
+  const [newDescription, setNewDescription] = useState('')
+
+  const baseTickets = sampleMode ? MOCK_TICKETS.slice(0, 8) : []
+  const tickets = [...userTickets, ...baseTickets]
   const filters = ['all', 'open', 'in-progress', 'resolved', 'escalated']
   const filtered = filter === 'all' ? tickets : tickets.filter(t => t.status === filter)
+
+  const categories = ['Leave', 'Payroll', 'Benefits', 'IT Access', 'Onboarding', 'Compliance', 'Other']
+
+  const handleCreateTicket = () => {
+    if (!newSubject.trim() || !newDescription.trim()) return
+    const newTicket: TicketData = {
+      id: `TK-${2000 + userTickets.length + 1}`,
+      subject: newSubject.trim(),
+      category: newCategory,
+      status: 'open',
+      priority: newPriority,
+      date: new Date().toISOString().split('T')[0],
+      description: newDescription.trim(),
+      assignee: 'Pending Assignment',
+      department: 'Employee',
+      slaHours: 0,
+      slaDeadline: newPriority === 'critical' ? 8 : newPriority === 'high' ? 24 : 48,
+      messages: [{ role: 'employee', content: newDescription.trim(), time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }],
+    }
+    setUserTickets(prev => [newTicket, ...prev])
+    setNewSubject('')
+    setNewCategory('Leave')
+    setNewPriority('medium')
+    setNewDescription('')
+    setShowCreateDialog(false)
+    setSelectedTicket(newTicket)
+  }
+
+  const handleSendReply = () => {
+    if (!replyText.trim() || !selectedTicket) return
+    const newMessage = { role: 'employee', content: replyText.trim(), time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+    const updatedTicket = { ...selectedTicket, messages: [...(selectedTicket.messages || []), newMessage] }
+    setSelectedTicket(updatedTicket)
+    // Update in userTickets if it's a user-created ticket
+    setUserTickets(prev => prev.map(t => t.id === updatedTicket.id ? updatedTicket : t))
+    setReplyText('')
+  }
 
   return (
     <div className="flex h-full">
       <div className={`${selectedTicket ? 'w-1/2' : 'w-full'} flex flex-col`}>
         <div className="p-4 border-b border-white/30">
-          <h2 className="font-serif text-2xl font-semibold">My Tickets</h2>
-          <p className="text-sm text-muted-foreground">Track your HR requests and their status</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-serif text-2xl font-semibold">My Tickets</h2>
+              <p className="text-sm text-muted-foreground">Track your HR requests and their status</p>
+            </div>
+            <Button onClick={() => setShowCreateDialog(true)} className="bg-primary text-primary-foreground" size="sm">
+              <Plus className="w-4 h-4 mr-1" />New Ticket
+            </Button>
+          </div>
         </div>
         <div className="p-4 border-b border-white/30">
           <div className="flex gap-2 flex-wrap">
@@ -488,11 +543,16 @@ function EmployeeTicketsScreen({ sampleMode }: { sampleMode: boolean }) {
             {filtered.length === 0 && (
               <div className="text-center py-12">
                 <Ticket className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-muted-foreground">{sampleMode ? 'No tickets match this filter' : 'No tickets yet -- you are all caught up!'}</p>
+                <p className="text-muted-foreground">{sampleMode || userTickets.length > 0 ? 'No tickets match this filter' : 'No tickets yet -- create one to get started!'}</p>
+                {!sampleMode && userTickets.length === 0 && (
+                  <Button onClick={() => setShowCreateDialog(true)} variant="outline" size="sm" className="mt-3">
+                    <Plus className="w-3 h-3 mr-1" />Create Your First Ticket
+                  </Button>
+                )}
               </div>
             )}
             {filtered.map(ticket => (
-              <button key={ticket.id} onClick={() => setSelectedTicket(ticket)} className={`w-full text-left p-4 rounded-xl transition-all hover:shadow-lg ${selectedTicket?.id === ticket.id ? 'glass-heavy border-primary/30 shadow-lg' : 'glass-light hover:bg-white/50'}`}>
+              <button key={ticket.id} onClick={() => { setSelectedTicket(ticket); setReplyText('') }} className={`w-full text-left p-4 rounded-xl transition-all hover:shadow-lg ${selectedTicket?.id === ticket.id ? 'glass-heavy border-primary/30 shadow-lg' : 'glass-light hover:bg-white/50'}`}>
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
@@ -513,6 +573,8 @@ function EmployeeTicketsScreen({ sampleMode }: { sampleMode: boolean }) {
           </div>
         </ScrollArea>
       </div>
+
+      {/* Ticket Detail Panel with Reply */}
       {selectedTicket && (
         <div className="w-1/2 border-l border-white/30 flex flex-col glass-panel">
           <div className="p-4 border-b border-white/30 flex items-center justify-between">
@@ -559,56 +621,179 @@ function EmployeeTicketsScreen({ sampleMode }: { sampleMode: boolean }) {
                 <Clock className="w-4 h-4 text-muted-foreground" />
                 <span className="text-muted-foreground">SLA: {selectedTicket.slaDeadline}h deadline / {selectedTicket.slaHours}h elapsed</span>
               </div>
+              <Separator className="bg-primary/10" />
+              {/* Reply Section */}
+              <div>
+                <h4 className="font-serif text-sm font-semibold mb-2">Add a Reply</h4>
+                <Textarea
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder="Type your message or provide additional details..."
+                  className="min-h-[80px] text-sm resize-none glass-input rounded-xl"
+                  rows={3}
+                />
+                <div className="flex items-center justify-between mt-2">
+                  <p className="text-xs text-muted-foreground">{replyText.length > 0 ? `${replyText.length} characters` : 'Add more info or follow up on this ticket'}</p>
+                  <Button onClick={handleSendReply} disabled={!replyText.trim()} size="sm" className="bg-primary text-primary-foreground">
+                    <Send className="w-3 h-3 mr-1" />Send Reply
+                  </Button>
+                </div>
+              </div>
             </div>
           </ScrollArea>
         </div>
+      )}
+
+      {/* Create Ticket Dialog */}
+      <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+        <DialogContent className="glass-dialog rounded-2xl max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-lg">Create New Ticket</DialogTitle>
+            <DialogDescription>Submit a new HR request or report an issue</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-2">
+            <div>
+              <Label className="text-sm font-medium mb-1.5 block">Subject</Label>
+              <Input
+                value={newSubject}
+                onChange={(e) => setNewSubject(e.target.value)}
+                placeholder="Brief summary of your request..."
+                className="glass-input"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-sm font-medium mb-1.5 block">Category</Label>
+                <select
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                  className="w-full h-9 px-3 rounded-xl border text-sm bg-white/50 backdrop-blur-sm border-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 text-foreground"
+                >
+                  {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div>
+                <Label className="text-sm font-medium mb-1.5 block">Priority</Label>
+                <select
+                  value={newPriority}
+                  onChange={(e) => setNewPriority(e.target.value as 'low' | 'medium' | 'high' | 'critical')}
+                  className="w-full h-9 px-3 rounded-xl border text-sm bg-white/50 backdrop-blur-sm border-white/50 focus:outline-none focus:ring-2 focus:ring-primary/30 text-foreground"
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                  <option value="critical">Critical</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <Label className="text-sm font-medium mb-1.5 block">Description</Label>
+              <Textarea
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+                placeholder="Describe your issue or request in detail..."
+                className="min-h-[120px] text-sm resize-none glass-input rounded-xl"
+                rows={5}
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setShowCreateDialog(false)} size="sm">Cancel</Button>
+              <Button onClick={handleCreateTicket} disabled={!newSubject.trim() || !newDescription.trim()} size="sm" className="bg-primary text-primary-foreground">
+                <Plus className="w-3 h-3 mr-1" />Create Ticket
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+
+// ─── SCREEN: Employee Org Chart (Visual Tree) ───
+function OrgTreeNode({ node, onSelect, selectedId, searchTerm }: { node: OrgNode; onSelect: (n: OrgNode) => void; selectedId: string | null; searchTerm: string }) {
+  const hasChildren = node.children.length > 0
+  const initials = node.name.split(' ').map(n => n[0]).join('')
+  const isSelected = selectedId === node.id
+
+  const matchesSearch = (n: OrgNode): boolean => {
+    if (!searchTerm) return true
+    const term = searchTerm.toLowerCase()
+    return n.name.toLowerCase().includes(term) || n.role.toLowerCase().includes(term) || n.department.toLowerCase().includes(term)
+  }
+
+  const nodeMatches = matchesSearch(node)
+  const anyChildMatches = (n: OrgNode): boolean => {
+    return matchesSearch(n) || n.children.some(c => anyChildMatches(c))
+  }
+  const childrenMatch = node.children.some(c => anyChildMatches(c))
+
+  if (searchTerm && !nodeMatches && !childrenMatch) return null
+
+  const getDeptColor = (dept: string) => {
+    switch (dept) {
+      case 'Executive': return 'from-primary to-primary/80'
+      case 'Engineering': return 'from-blue-600 to-blue-500'
+      case 'HR': return 'from-purple-600 to-purple-500'
+      case 'Finance': return 'from-green-600 to-green-500'
+      default: return 'from-primary to-primary/80'
+    }
+  }
+
+  return (
+    <div className="flex flex-col items-center">
+      {/* Node Card */}
+      <button
+        onClick={() => onSelect(node)}
+        className={`relative glass-card rounded-2xl p-3 w-44 text-center transition-all hover:shadow-lg hover:-translate-y-0.5 ${isSelected ? 'ring-2 ring-primary shadow-lg' : ''} ${searchTerm && nodeMatches ? 'ring-2 ring-accent' : ''}`}
+      >
+        <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${getDeptColor(node.department)} flex items-center justify-center text-white text-sm font-bold mx-auto mb-2 shadow-md`}>
+          {initials}
+        </div>
+        <p className="text-sm font-semibold text-foreground truncate">{node.name}</p>
+        <p className="text-[11px] text-muted-foreground truncate">{node.role}</p>
+        <Badge variant="outline" className="text-[9px] mt-1.5 bg-white/30">{node.department}</Badge>
+      </button>
+
+      {/* Connector line down from parent to children */}
+      {hasChildren && (
+        <>
+          {/* Vertical line from parent down */}
+          <div className="w-px h-6 bg-primary/25" />
+
+          {/* Horizontal bar spanning all children */}
+          {node.children.length > 1 && (
+            <div className="relative w-full flex justify-center">
+              <div className="h-px bg-primary/25" style={{ width: `${Math.max((node.children.filter(c => !searchTerm || anyChildMatches(c)).length - 1) * 192, 0)}px` }} />
+            </div>
+          )}
+
+          {/* Children row */}
+          <div className="flex items-start gap-4 pt-0">
+            {node.children.map(child => {
+              if (searchTerm && !anyChildMatches(child)) return null
+              return (
+                <div key={child.id} className="flex flex-col items-center">
+                  {/* Vertical line from horizontal bar to child */}
+                  <div className="w-px h-6 bg-primary/25" />
+                  <OrgTreeNode
+                    node={child}
+                    onSelect={onSelect}
+                    selectedId={selectedId}
+                    searchTerm={searchTerm}
+                  />
+                </div>
+              )
+            })}
+          </div>
+        </>
       )}
     </div>
   )
 }
 
-// ─── SCREEN: Employee Org Chart ───
 function EmployeeOrgChartScreen({ sampleMode }: { sampleMode: boolean }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedNode, setSelectedNode] = useState<OrgNode | null>(null)
-  const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(['o1', 'o2', 'o3', 'o4']))
-
-  const toggleExpand = (id: string) => {
-    setExpandedNodes(prev => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id); else next.add(id)
-      return next
-    })
-  }
-
-  const matchesSearch = (node: OrgNode): boolean => {
-    if (!searchTerm) return true
-    const term = searchTerm.toLowerCase()
-    return node.name.toLowerCase().includes(term) || node.role.toLowerCase().includes(term) || node.department.toLowerCase().includes(term)
-  }
-
-  const renderNode = (node: OrgNode, depth: number = 0): React.ReactNode => {
-    const hasChildren = node.children.length > 0
-    const isExpanded = expandedNodes.has(node.id)
-    const matches = matchesSearch(node)
-    const childMatches = node.children.some(c => matchesSearch(c) || c.children.some(gc => matchesSearch(gc)))
-    if (!matches && !childMatches && searchTerm) return null
-    return (
-      <div key={node.id} style={{ marginLeft: depth * 24 }}>
-        <button onClick={() => setSelectedNode(node)} className={`flex items-center gap-2 w-full text-left p-2 rounded-xl transition-all hover:bg-white/50 ${selectedNode?.id === node.id ? 'glass-heavy' : ''}`}>
-          {hasChildren && <button onClick={(e) => { e.stopPropagation(); toggleExpand(node.id) }}>{isExpanded ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />}</button>}
-          {!hasChildren && <span className="w-4" />}
-          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-semibold">{node.name.split(' ').map(n => n[0]).join('')}</div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{node.name}</p>
-            <p className="text-xs text-muted-foreground truncate">{node.role}</p>
-          </div>
-          <Badge variant="outline" className="text-[10px]">{node.department}</Badge>
-        </button>
-        {hasChildren && isExpanded && node.children.map(child => renderNode(child, depth + 1))}
-      </div>
-    )
-  }
 
   return (
     <div className="flex h-full">
@@ -624,8 +809,15 @@ function EmployeeOrgChartScreen({ sampleMode }: { sampleMode: boolean }) {
           </div>
         </div>
         <ScrollArea className="flex-1">
-          <div className="p-4">
-            {sampleMode ? renderNode(MOCK_ORG) : (
+          <div className="p-8 flex justify-center min-w-max">
+            {sampleMode ? (
+              <OrgTreeNode
+                node={MOCK_ORG}
+                onSelect={setSelectedNode}
+                selectedId={selectedNode?.id ?? null}
+                searchTerm={searchTerm}
+              />
+            ) : (
               <div className="text-center py-12">
                 <Network className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
                 <p className="text-muted-foreground">Enable sample data to view the org chart</p>
