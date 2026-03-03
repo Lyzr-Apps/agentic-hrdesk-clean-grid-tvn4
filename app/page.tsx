@@ -168,7 +168,7 @@ const AGENTS_INFO: Record<string, { name: string; purpose: string; steps: string
   [AGENT_IDS.slaPrediction]: { name: 'SLA Predictor', purpose: 'Predicts SLA breach risk for open tickets', steps: ['Analyzing ticket age', 'Assessing complexity', 'Checking workload distribution', 'Calculating breach probability', 'Generating recommendations'] },
 }
 
-// ─── Agent Thinking Orchestration Bar (one-line) ───
+// ─── Agent Thinking Orchestration Bar (one-line, for non-concierge screens) ───
 function AgentThinkingBar({ activeAgentId }: { activeAgentId: string | null }) {
   const [stepIndex, setStepIndex] = useState(0)
 
@@ -205,6 +205,161 @@ function AgentThinkingBar({ activeAgentId }: { activeAgentId: string | null }) {
         {agent.steps.map((_, i) => (
           <span key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i <= (stepIndex % agent.steps.length) ? 'bg-accent' : 'bg-muted'}`} />
         ))}
+      </div>
+    </div>
+  )
+}
+
+// ─── Sub-agent definitions for orchestration visualization ───
+const ORCHESTRATOR_SUB_AGENTS = [
+  { id: 'classify', name: 'Intent Classifier', icon: 'search', description: 'Analyzing query intent & domain', duration: 2000 },
+  { id: 'route', name: 'Router', icon: 'route', description: 'Selecting specialized sub-agents', duration: 1200 },
+  { id: 'policy', name: 'Policy Retrieval', icon: 'book', description: 'Searching HR knowledge base', duration: 3000 },
+  { id: 'action', name: 'Action Execution', icon: 'zap', description: 'Processing requested actions', duration: 2500 },
+  { id: 'sentiment', name: 'Sentiment Analysis', icon: 'activity', description: 'Evaluating tone & urgency', duration: 1800 },
+  { id: 'aggregate', name: 'Response Aggregator', icon: 'sparkles', description: 'Composing final response', duration: 2000 },
+]
+
+function SubAgentIcon({ type, className }: { type: string; className?: string }) {
+  switch (type) {
+    case 'search': return <Search className={className} />
+    case 'route': return <Network className={className} />
+    case 'book': return <BookOpen className={className} />
+    case 'zap': return <Zap className={className} />
+    case 'activity': return <Activity className={className} />
+    case 'sparkles': return <Sparkles className={className} />
+    default: return <Bot className={className} />
+  }
+}
+
+// ─── Inline Orchestration Visualization (chat-embedded) ───
+function InlineChatOrchestration({ onScrollNeeded }: { onScrollNeeded?: () => void }) {
+  const [activeStep, setActiveStep] = useState(0)
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
+
+  useEffect(() => {
+    let currentStep = 0
+    const advanceStep = () => {
+      if (currentStep >= ORCHESTRATOR_SUB_AGENTS.length) return
+
+      setActiveStep(currentStep)
+      onScrollNeeded?.()
+
+      const duration = ORCHESTRATOR_SUB_AGENTS[currentStep].duration
+      const completeTimeout = setTimeout(() => {
+        setCompletedSteps(prev => {
+          const next = new Set(prev)
+          next.add(currentStep)
+          return next
+        })
+        currentStep++
+        if (currentStep < ORCHESTRATOR_SUB_AGENTS.length) {
+          const nextTimeout = setTimeout(advanceStep, 300)
+          timeouts.push(nextTimeout)
+        }
+      }, duration)
+      timeouts.push(completeTimeout)
+    }
+
+    const timeouts: ReturnType<typeof setTimeout>[] = []
+    advanceStep()
+
+    return () => { timeouts.forEach(t => clearTimeout(t)) }
+  }, [onScrollNeeded])
+
+  const getStepStatus = (index: number): 'pending' | 'active' | 'completed' => {
+    if (completedSteps.has(index)) return 'completed'
+    if (index === activeStep) return 'active'
+    return 'pending'
+  }
+
+  return (
+    <div className="flex justify-start">
+      <div className="flex items-start gap-2">
+        <div className="w-8 h-8 rounded-full bg-accent text-accent-foreground flex items-center justify-center flex-shrink-0">
+          <Bot className="w-4 h-4" />
+        </div>
+        <div className="glass-chat-agent rounded-2xl p-4 max-w-[420px]">
+          {/* Header */}
+          <div className="flex items-center gap-2 mb-3">
+            <div className="relative flex items-center justify-center w-4 h-4">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-accent/40 animate-ping" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent" />
+            </div>
+            <span className="text-xs font-semibold text-primary">HR Orchestrator</span>
+            <span className="text-[10px] text-muted-foreground">Processing query...</span>
+          </div>
+
+          {/* Sub-agent pipeline */}
+          <div className="space-y-1.5">
+            {ORCHESTRATOR_SUB_AGENTS.map((agent, index) => {
+              const status = getStepStatus(index)
+              return (
+                <div
+                  key={agent.id}
+                  className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl transition-all duration-500 ${
+                    status === 'active'
+                      ? 'glass-heavy border-accent/30 shadow-sm'
+                      : status === 'completed'
+                      ? 'bg-green-50/60 border border-green-200/40'
+                      : 'glass-light opacity-50'
+                  }`}
+                >
+                  {/* Status icon */}
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                    status === 'active'
+                      ? 'bg-accent/20'
+                      : status === 'completed'
+                      ? 'bg-green-100'
+                      : 'bg-muted/50'
+                  }`}>
+                    {status === 'active' ? (
+                      <Loader2 className="w-3 h-3 animate-spin text-accent" />
+                    ) : status === 'completed' ? (
+                      <CheckCircle2 className="w-3 h-3 text-green-600" />
+                    ) : (
+                      <SubAgentIcon type={agent.icon} className="w-2.5 h-2.5 text-muted-foreground/50" />
+                    )}
+                  </div>
+
+                  {/* Agent info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className={`text-[11px] font-semibold transition-colors ${
+                        status === 'active' ? 'text-primary' : status === 'completed' ? 'text-green-700' : 'text-muted-foreground'
+                      }`}>
+                        {agent.name}
+                      </span>
+                    </div>
+                    {status === 'active' && (
+                      <p className="text-[10px] text-muted-foreground animate-pulse truncate">{agent.description}</p>
+                    )}
+                  </div>
+
+                  {/* Connector line to next */}
+                  {status === 'active' && (
+                    <div className="flex gap-0.5 flex-shrink-0">
+                      <span className="w-1 h-1 bg-accent rounded-full animate-bounce" />
+                      <span className="w-1 h-1 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                      <span className="w-1 h-1 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Progress bar */}
+          <div className="mt-3 flex items-center gap-2">
+            <div className="flex-1 h-1.5 bg-muted/50 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-500"
+                style={{ width: `${Math.min(((completedSteps.size) / ORCHESTRATOR_SUB_AGENTS.length) * 100, 100)}%` }}
+              />
+            </div>
+            <span className="text-[10px] text-muted-foreground font-medium">{completedSteps.size}/{ORCHESTRATOR_SUB_AGENTS.length}</span>
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -336,9 +491,13 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
     else setMessages([])
   }, [sampleMode])
 
-  useEffect(() => {
+  const scrollToBottom = useRef(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-  }, [messages])
+  }).current
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages, loading, scrollToBottom])
 
   const quickActions = ['Apply Leave', 'View Payslip', 'Raise IT Request', 'Salary Certificate']
 
@@ -419,18 +578,7 @@ function EmployeeConciergeScreen({ sampleMode, activeAgentId, setActiveAgentId }
             </div>
           ))}
           {loading && (
-            <div className="flex justify-start">
-              <div className="flex items-start gap-2">
-                <div className="w-8 h-8 rounded-full bg-accent text-accent-foreground flex items-center justify-center"><Bot className="w-4 h-4" /></div>
-                <div className="glass-chat-agent rounded-2xl p-3">
-                  <div className="flex gap-1">
-                    <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" />
-                    <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }} />
-                    <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }} />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <InlineChatOrchestration onScrollNeeded={scrollToBottom} />
           )}
         </div>
         <div className="p-4 border-t border-white/30 glass-header">
